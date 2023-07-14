@@ -5,6 +5,7 @@ from typing import List, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
+from numpy.linalg import norm
 
 from gefest.core.structure.domain import Domain
 from gefest.core.structure.point import Point
@@ -173,12 +174,32 @@ def create_poly(centroid: 'Point',
     # sigma defines neighborhood
 
     num_points = randint(domain.min_points_num, domain.max_points_num)  # Number of points in a polygon
+
     points = []
-    for _ in range(num_points):
+    lenght = domain.min_dist * 35 * 0.05
+    while len(points) < num_points:
         point = create_polygon_point(centroid, sigma)  # point in polygon
         while not in_bound(point, domain):  # checking if a point is in domain
             point = create_polygon_point(centroid, sigma)
         points.append(point)
+        ind = len(points)-1
+        if ind > 0:
+            """
+            Here we correct distance between points. That necessary in comsol cases, because 
+            distance correlated with time to solve a model. And distance must be as bigger as it may be.
+            
+            While we add a point after first, we checking a distance between previews and current points, if distance 
+            less than 1/10 of maximum side length of a domain allow area.
+            
+            In the end, we check distance between first point and last. It need if we generate a close polygone,
+            and we need to control last side of poly.
+            """
+            if norm(np.array(points[ind].coords()[:2])-np.array(points[ind-1].coords()[:2]),ord = 1) < lenght:
+                del points[ind]
+        if len(points) == num_points:
+            if norm(np.array(points[-1].coords()[:2])-np.array(points[0].coords()[:2]),ord = 1) < lenght:
+                del points[-1]
+
     if domain.is_closed:
         points.append(points[0])
 
