@@ -5,6 +5,7 @@ from multiprocessing import Pool
 
 import numpy as np
 
+from gefest.core.algs.geom.validation import distance_between_points
 from gefest.core.algs.postproc.resolve_errors import postprocess
 from gefest.core.opt.constraints import check_constraints
 from gefest.tools.samplers.standard.standard import MAX_ITER, NUM_PROC, StandardSampler
@@ -66,7 +67,7 @@ def mutation(structure: Structure, domain: Domain, rate=0.6) -> Structure:
 
 
 def polygons_mutation(new_structure: Structure, polygon_to_mutate_idx, domain: Domain) -> Structure:
-    mutation_way = [drop_poly, add_poly, rotate_poly, resize_poly]
+    mutation_way = [rotate_poly, resize_poly] #deleted drop_poly, add_poly
     choosen_way = random.choice(mutation_way)
     new_structure = choosen_way(new_structure, polygon_to_mutate_idx, domain)
 
@@ -122,7 +123,7 @@ def add_delete_point_mutation(new_structure: Structure, polygon_to_mutate_idx, m
 
         if new_point is None:
             return None
-
+        # TODO: try to correct distance between points after adding new
         if random.random() < point_add_mutation_prob:
             if mutate_point_idx + 1 < len(polygon_to_mutate.points):
                 new_structure.polygons[polygon_to_mutate_idx].points.insert(mutate_point_idx + 1, new_point)
@@ -174,12 +175,19 @@ def points_mutation(new_structure: Structure, polygon_to_mutate_idx, domain: Dom
     point_to_mutate = polygon_to_mutate.points[mutate_point_idx]
     if point_to_mutate in domain.fixed_points:
         return None
-
+    structure_mut = copy.deepcopy(new_structure)
     case = random.randint(0, 1)
     if case == 0:
-        new_structure = add_delete_point_mutation(new_structure, polygon_to_mutate_idx, mutate_point_idx, domain)
+        structure_mut = add_delete_point_mutation(structure_mut, polygon_to_mutate_idx, mutate_point_idx, domain)
     else:
-        new_structure = pos_change_point_mutation(new_structure, polygon_to_mutate_idx, mutate_point_idx, domain)
+        structure_mut = pos_change_point_mutation(structure_mut, polygon_to_mutate_idx, mutate_point_idx, domain)
+    #will mutate point again and again antil sides of poly will not be correct
+    while distance_between_points(structure_mut,domain):
+        structure_mut = copy.deepcopy(new_structure)
+        if case == 0:
+            structure_mut = add_delete_point_mutation(structure_mut, polygon_to_mutate_idx, mutate_point_idx, domain)
+        else:
+            structure_mut = pos_change_point_mutation(structure_mut, polygon_to_mutate_idx, mutate_point_idx, domain)
 
     return new_structure
 

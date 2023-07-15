@@ -2,7 +2,8 @@
 Here are defined general constraints on polygons by validation rules.
 Validation is a checking on valid and unvalid objects for further processing.
 """
-
+import numpy as np
+from numpy.linalg import norm
 from shapely.geometry import Point as GeomPoint, Polygon as GeomPolygon
 from shapely.validation import explain_validity
 from itertools import permutations
@@ -102,6 +103,23 @@ def self_intersection(structure: 'Structure') -> bool:
                 _forbidden_validity(explain_validity(GeomPolygon([GeomPoint(pt.x, pt.y) for pt in poly.points])))
                 for poly in structure.polygons])
 
+def distance_between_points(structure: 'Structure', domain: 'Domain') -> bool:
+    """The method indicates that any :obj:`Point` in the :obj:`Polygon`
+    is placed in norm distance
+    Args:
+        structure: the :obj:`Structure` that explore
+    Returns:
+        ``True`` if any side of poly have incorrect lenght, otherwise - ``False``
+    """
+    lenght = domain.dist_between_points
+    p1 = structure
+    check = []
+    for i in [[p.coords()[:2] for p in poly.points] for poly in p1.polygons]:
+        for ind, pnt in enumerate(i[1:]):
+            check.append(norm(np.array(pnt) - np.array(i[ind]), ord=1) < lenght)
+    if any(check):
+        print('Намутировал плохой полигон!, distance_between_points')
+    return any(check)
 
 def unclosed_poly(structure: 'Structure', domain: 'Domain') -> bool:
     """Checking for equality of the first and the last points

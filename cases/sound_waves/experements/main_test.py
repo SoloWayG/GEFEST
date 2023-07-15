@@ -21,8 +21,8 @@ from cases.sound_waves.experements.microphone_points import Microphone
 # If the value is False, pretrained models will be selected
 # otherwise put path to your model
 opt_params.is_closed = True
-opt_params.pop_size = 15
-opt_params.n_steps = 25
+opt_params.pop_size = 2
+opt_params.n_steps = 2
 opt_params.n_polys = 1
 opt_params.n_points = 20
 opt_params.m_rate = 0.9
