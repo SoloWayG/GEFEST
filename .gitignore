@@ -135,18 +135,3 @@ dmypy.json
 
 # testing documentation
 test.ipynb
-/cases/sound_waves/experements/2fig_m09_cr_01_pop15_20iters_extra/
-/cases/sound_waves/experements/1307_exp_add_del_MSE_Denis_deft_dice_metric_p_size_15_n_stps_25_m_rate_0.9_extra_True_point_measurement_2/
-/cases/sound_waves/experements/1407_exp_no_add_del_MSE_dice_metric_p_size_2_n_stps_2_m_rate_0.9_extra_True_point_measurement_2/
-/cases/sound_waves/experements/1407_exp_no_add_del_MSE_dice_metric_p_size_15_n_stps_25_m_rate_0.9_extra_True_point_measurement_2/
-/cases/sound_waves/experements/exp_MSE_Dice_x10_p_size_15_n_stps_20_m_rate_0.9_extra_True/
-/cases/sound_waves/experements/exp_MSE_p_size_15_n_stps_25_m_rate_0.9_extra_True/
-/cases/sound_waves/experements/exp_no_add_del_MSE_dice_metric_p_size_15_n_stps_25_m_rate_0.9_extra_True_point_measurement_2/
-/cases/sound_waves/experements/exp_no_add_del_MSE_Dice_x10_second_p_size_15_n_stps_25_m_rate_0.9_extra_True/
-/cases/sound_waves/experements/exp_p_size15_n_steps25_m_rate0.9_extra_True/
-/cases/sound_waves/experements/first_exp/
-/cases/sound_waves/experements/mut_0.6_pop_50_steps_35_extra/
-/cases/sound_waves/experements/r_exp_100pop_noextra/
-/cases/sound_waves/experements/random_search/
-/cases/sound_waves/experements/test/
-/cases/sound_waves/experements/w_o_extra/
