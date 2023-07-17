@@ -41,7 +41,7 @@ figure_names = [i.split(sep='.')[0] for i in figure_file_names]#Split name of fi
 print(figure_names)
 best_structure = poly_from_comsol_txt(path=path_fig+figure_file_names[0])#upload new best struct from figure files
 
-new_path = f'1407_Denis_mut_exp_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}_extra_{is_extra}'     #path to create new dir of experement iteration
+new_path = f'1707_Denis_mut_exp_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}_extra_{is_extra}'     #path to create new dir of experement iteration
 ###############################
 if os.path.exists(new_path):#
     shutil.rmtree(new_path) #

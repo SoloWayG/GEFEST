@@ -30,6 +30,8 @@ class Domain:
             with the last one) if ``True``, against if ``False``; by default is ``True``
         geometry: determinate a way for processing created objects, by default is ``None``
             If ``geometry=None``, created objects will process as 2D objects via :obj:`Geometry2D()`
+            polygon_side: min distance between points, corresponde to part of max side of allow area. Default as 5%
+            of allow area max side
     Attributes:
         min_x: the minimum value among **x** coordinates within **allowed_area**
         max_x: the maximum value among **x** coordinates within **allowed_area**
@@ -48,7 +50,8 @@ class Domain:
                  prohibited_area: Optional = None,
                  fixed_points=None,
                  is_closed=True,
-                 geometry=None):
+                 geometry=None,
+                 polygon_side=0.05):
         self.name = name
         self.is_closed = is_closed
         if geometry is None:
@@ -74,7 +77,7 @@ class Domain:
         self.min_points_num = min_points_num
 
         self.min_dist = max(self.max_x - self.min_x, self.max_y - self.min_y) / 35
-
+        self.dist_between_points = self.min_dist*35*polygon_side
         self.fixed_points = [Polygon(polygon_id='fixed', points=[Point(p[0], p[1]) for p in poly]) for poly in
                              fixed_points] \
             if fixed_points is not None else []

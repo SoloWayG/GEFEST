@@ -31,7 +31,7 @@ Prohibited objects
 #prohibited = create_prohibited(fixed_area=fixed_area)
 
 
-def configurate_domain(poly_num: int, points_num: int, is_closed: bool):
+def configurate_domain(poly_num: int, points_num: int, is_closed: bool,polygon_side=0.05):
     # ------------
     # GEFEST domain based on user-defined configuration_de
     # ------------
@@ -48,7 +48,8 @@ def configurate_domain(poly_num: int, points_num: int, is_closed: bool):
         min_poly_num=1,
         max_points_num=points_num,
         min_points_num=min_points_num,
-        is_closed=is_closed
+        is_closed=is_closed,
+        polygon_side=polygon_side
     )
     task_setup = Setup(domain=domain)
 

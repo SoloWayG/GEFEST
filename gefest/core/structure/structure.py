@@ -174,30 +174,29 @@ def create_poly(centroid: 'Point',
     # sigma defines neighborhood
 
     num_points = randint(domain.min_points_num, domain.max_points_num)  # Number of points in a polygon
-
     points = []
-    lenght = domain.min_dist * 35 * 0.05
+    lenght = domain.dist_between_points
     while len(points) < num_points:
         point = create_polygon_point(centroid, sigma)  # point in polygon
         while not in_bound(point, domain):  # checking if a point is in domain
             point = create_polygon_point(centroid, sigma)
         points.append(point)
-        ind = len(points)-1
+        ind = len(points) - 1
         if ind > 0:
             """
             Here we correct distance between points. That necessary in comsol cases, because 
             distance correlated with time to solve a model. And distance must be as bigger as it may be.
-            
+
             While we add a point after first, we checking a distance between previews and current points, if distance 
             less than 1/10 of maximum side length of a domain allow area.
-            
+
             In the end, we check distance between first point and last. It need if we generate a close polygone,
             and we need to control last side of poly.
             """
-            if norm(np.array(points[ind].coords()[:2])-np.array(points[ind-1].coords()[:2]),ord = 1) < lenght:
+            if norm(np.array(points[ind].coords()[:2]) - np.array(points[ind - 1].coords()[:2]), ord=1) < lenght:
                 del points[ind]
         if len(points) == num_points:
-            if norm(np.array(points[-1].coords()[:2])-np.array(points[0].coords()[:2]),ord = 1) < lenght:
+            if norm(np.array(points[-1].coords()[:2]) - np.array(points[0].coords()[:2]), ord=1) < lenght:
                 del points[-1]
 
     if domain.is_closed:
@@ -211,8 +210,10 @@ def create_poly(centroid: 'Point',
 def create_area(domain: 'Domain',
                 structure: 'Structure',
                 geometry: 'Geometry') -> (Point, float):
+    low = 7
+    high = 17
     n_poly = len(structure.polygons)  # Number of already existing polygons
-    area_size = np.random.randint(low=3, high=15)  # Neighborhood compression ratio
+    area_size = np.random.randint(low=low, high=high)  # Neighborhood compression ratio
     sigma = max(domain.max_x - domain.min_x, domain.max_y - domain.min_y) / area_size  # Neighborhood size
     if n_poly == 0:
         # In the absence of polygons, the centroid can be located anywhere
@@ -227,7 +228,7 @@ def create_area(domain: 'Domain',
         min_dist = distance(centroid, structure, geometry)  # Distance to the nearest polygon in the structure
         max_attempts = 20
         while min_dist < 2.5 * sigma:
-            area_size = np.random.randint(low=3, high=15)
+            area_size = np.random.randint(low=low, high=high)
             sigma = max(domain.max_x - domain.min_x, domain.max_y - domain.min_y) / area_size
             centroid = create_random_point(domain)
             min_dist = distance(centroid, structure, geometry)
