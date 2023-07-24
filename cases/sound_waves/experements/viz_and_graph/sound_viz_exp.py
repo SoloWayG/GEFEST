@@ -52,6 +52,7 @@ if __name__ == "__main__":
     spls_opt = [sound.estimate(i) for i in optimized_structures]
 
     spls_opt.insert(0,spl_0)
+    micro = Microphone().array()
     micro_p = Microphone.coords['points']
     fig, axs = plt.subplots(nrows=3, ncols=len(spls_opt)//2, figsize=(12, 12), sharey=True)
     print(len(spls_opt))
@@ -60,15 +61,14 @@ if __name__ == "__main__":
         if i < len(spls_opt):
             if i == 0:
                 ax.set_title('*Reference_structure*')
-            elif i<len(spls_opt)-1:
-                ax.set_title(f'opt str {i},fitness :{best_fit[i-1]}')
-            else:
-
-                ax.set_title(f'Half border, fitness:{best_fit[i-1]}')
+            elif i<len(spls_opt):
+                ax.set_title(f'Число точек замера: {sum([len(i) for i in micro[i-1]])},fitness :{best_fit[i-1]}')
 
             im = ax.pcolormesh(spls_opt[i],cmap="coolwarm")
-            if (i != len(spls_opt)-1) and i<len(spls_opt) and i !=0:
+            if (i<len(spls_opt)-2 and i !=0):
                 ax.scatter([x[0] for x in micro_p[i-1]],[y[1] for y in micro_p[i-1]],marker='*',c='red',linewidths = 4.5)#plot points of microphones
+            elif i>=len(spls_opt)-2:
+                ax.plot([x[0] for x in micro_p[i-1]],[y[1] for y in micro_p[i-1]],color='red')
             plt.colorbar(im,ax=ax)
 
 

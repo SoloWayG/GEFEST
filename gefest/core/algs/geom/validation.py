@@ -99,13 +99,14 @@ def self_intersection(structure: 'Structure') -> bool:
         ``True`` if at least one of the polygons in the :obj:`Structure` is
         self-intersected, otherwise - ``False``
     """
+
     return any([len(poly.points) > 2 and
                 _forbidden_validity(explain_validity(GeomPolygon([GeomPoint(pt.x, pt.y) for pt in poly.points])))
                 for poly in structure.polygons])
 
 def distance_between_points(structure: 'Structure', domain: 'Domain') -> bool:
-    """The method indicates that any :obj:`Point` in the :obj:`Polygon`
-    is placed in norm distance
+    """The method indicates that any :obj:`Point` in each :obj:`Polygon` of :obj:`Structure`
+    is placed in correct distance by previous point
     Args:
         structure: the :obj:`Structure` that explore
     Returns:
@@ -119,6 +120,22 @@ def distance_between_points(structure: 'Structure', domain: 'Domain') -> bool:
             check.append(norm(np.array(pnt) - np.array(i[ind]), ord=1) < lenght)
     if any(check):
         print('Намутировал плохой полигон!, distance_between_points')
+    return any(check)
+def distance_between_points_in_poly(poly: 'Polygon', domain: 'Domain') -> bool:
+    """The method indicates that any :obj:`Point` in the :obj:`Polygon`
+    is placed in norm distance
+    Args:
+        poly: the :obj:`Polygon` that explore
+    Returns:
+        ``True`` if side of poly have incorrect lenght, otherwise - ``False``
+    """
+    lenght = domain.dist_between_points
+    check = []
+    for i in [p.coords()[:2] for p in poly.points]:
+        for ind, pnt in enumerate(i[1:]):
+            check.append(norm(np.array(pnt) - np.array(i[ind]), ord=1) < lenght)
+    if any(check):
+        print('Намутировал плохой полигон!, distance_between_points_in_poly')
     return any(check)
 
 def unclosed_poly(structure: 'Structure', domain: 'Domain') -> bool:

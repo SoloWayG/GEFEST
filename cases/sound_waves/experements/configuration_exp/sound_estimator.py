@@ -26,39 +26,47 @@ def configurate_estimator(domain: "Domain", path_best_struct=None, iters = None)
             best_structure = pickle.load(f)
         best_spl = sound.estimate(best_structure)
         best_spl = np.nan_to_num(best_spl, nan=0, neginf=0, posinf=0)
-        ##########Changed##########
-        if iters == len(Microphone.arrs['best'])-1:
-            iters = None
-        if iters is None:
-            best_spl = np.array(list(best_spl[0,60:])+list(best_spl[:,-1])+list(best_spl[-1,(120 // 2):]))
-        else:
-            best = deepcopy(best_spl)
-            best_spl = [best[a[0], a[1]] for a in Microphone.arrs['best'][iters]]
-        #best_spl = np.array(best_spl[:, -1])
-        #############################
+        micro = Microphone(matrix=best_spl).array()
+        best_spl = np.concatenate(micro[iters])
+        # ##########Changed##########
+        # if iters == len(Microphone.arrs['best'])-1:
+        #     iters = None
+        # if iters is None:
+        #     best_spl = np.array(list(best_spl[0,60:])+list(best_spl[:,-1])+list(best_spl[-1,(120 // 2):]))
+        #
+        # else:
+        #     best = deepcopy(best_spl)
+        #     best_spl = [best[a[0], a[1]] for a in Microphone.arrs['best'][iters]]
+        # #best_spl = np.array(best_spl[:, -1])
+        # #############################
 
     # Loss for minimizing, it is optional function
     def loss(struct: Structure, estimator):
 
         spl = estimator.estimate(struct)
-        ##########Changed##########
-        if iters is None:
-            lenght = len(np.array(list(spl[0,60:])+list(spl[:,-1])+list(spl[-1,(120 // 2):])))
-            spl =np.array(list(spl[0,60:])+list(spl[:,-1])+list(spl[-1,(120 // 2):]))
+        micro_spl = Microphone(matrix=spl).array()
 
-        else:
-            lenght = len(Microphone.arrs['spl'][iters])
 
-            spl_ = deepcopy(spl)
-            spl = [spl_[a[0], a[1]] for a in Microphone.arrs['spl'][iters]]
-
-        #spl = np.array(spl[:, -1])
-        ###########################
+        spl = np.concatenate(micro_spl[iters])
+        lenght = len(spl)
+        # ##########Changed##########
+        # if iters is None:
+        #     lenght = sum([len(i) for i in micro[iters]])
+        #     spl =np.array(list(spl[0,60:])+list(spl[:,-1])+list(spl[-1,(120 // 2):]))
+        #
+        # else:
+        #     lenght = len(Microphone.arrs['spl'][iters])
+        #
+        #     spl_ = deepcopy(spl)
+        #     spl = [spl_[a[0], a[1]] for a in Microphone.arrs['spl'][iters]]
+        #
+        # #spl = np.array(spl[:, -1])
+        # ###########################
 
         current_spl = np.nan_to_num(spl, nan=0, neginf=0, posinf=0)
         metric = dice(best_structure, struct)
         print('Dice is',dice(best_structure, struct))
-        l_f = np.sum((best_spl - current_spl)**2)/lenght# + (1-dice(best_structure, struct))*10
+        l_f = np.sum((best_spl - current_spl)**2)/lenght # + (1-dice(best_structure, struct))*10
 
 
         return l_f, metric

@@ -1,9 +1,10 @@
 import numpy as np
 from copy import deepcopy
 
-from gefest.core.algs.geom.validation import out_of_bound, self_intersection, too_close, unclosed_poly
+from gefest.core.algs.geom.validation import out_of_bound, self_intersection, too_close, unclosed_poly, \
+    distance_between_points, distance_between_points_in_poly
 from gefest.core.structure.domain import Domain
-from gefest.core.structure.structure import Polygon, Structure, Point
+from gefest.core.structure.structure import Polygon, Structure, Point, get_random_structure, get_random_poly
 
 """
 Defines methods to correct wrong structures (not satisfying the constraints)
@@ -32,20 +33,27 @@ def postprocess(structure: Structure, domain: Domain) -> Structure:
         checked by rules on stages before and corrected :obj:`Structure`
     """
     corrected_structure = deepcopy(structure)
-
+    # if distance_between_points(corrected_structure, domain):
+    #     print()
+    #     corrected_structure = get_random_structure(domain=domain)
     # Fixing each polygon in structure
     try:
         for i, poly in enumerate(corrected_structure.polygons):
             local_structure = Structure([poly])
+            if distance_between_points(local_structure, domain):
+                corrected_structure.polygons[i] = get_random_poly(local_structure,domain)
+                print('Исправили полигон в postprocess')
             if unclosed_poly(local_structure, domain) and domain.is_closed:
                 corrected_structure.polygons[i] = _correct_unclosed_poly(poly)
             if self_intersection(local_structure):
+                print("Щас может все сломаться")
                 corrected_structure.polygons[i] = _correct_self_intersection(poly, domain)
             if out_of_bound(local_structure, domain):
                 corrected_structure.polygons[i] = _correct_wrong_point(poly, domain)
     except AttributeError:
         return structure
-
+    if distance_between_points(corrected_structure, domain):
+        print("ВСЕ ХУЙня ПОСТПРОЦЕСС ВСЕ СЛОМАЛ")
     #  Fixing proximity between polygons
     if too_close(structure, domain):
         corrected_structure = _correct_closeness(corrected_structure, domain)

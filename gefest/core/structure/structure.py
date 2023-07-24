@@ -198,11 +198,14 @@ def create_poly(centroid: 'Point',
         if len(points) == num_points:
             if norm(np.array(points[-1].coords()[:2]) - np.array(points[0].coords()[:2]), ord=1) < lenght:
                 del points[-1]
+        if len(points) == num_points and domain.is_closed:
+            points.append(points[0])
+            poly = geometry.get_convex(Polygon('tmp', points=points))  # avoid self intersection in polygon
+            points = poly.points
+        elif len(points) == num_points:
+            poly = geometry.get_convex(Polygon('tmp', points=points))  # avoid self intersection in polygon
+            points = poly.points
 
-    if domain.is_closed:
-        points.append(points[0])
-
-    poly = geometry.get_convex(Polygon('tmp', points=points))  # avoid self intersection in polygon
 
     return poly
 

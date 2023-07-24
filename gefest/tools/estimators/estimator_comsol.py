@@ -26,9 +26,16 @@ class Estimator:
         performance = []
         dice_metric = []
         size = len(population)
+        best_fitness = np.inf
         if self.loss:
             for i in range(size):
-                one_perf, one_dice= self.loss(population[i], self.estimator)
+                one_perf, one_dice, model, idx, dir_path, client = self.loss(population[i], self.estimator)
+                if None in [one_perf, one_dice, model, idx, dir_path, client]:#Check if is estimate ends with errors
+                    continue
+                if one_perf < best_fitness:
+                    best_fitness = one_perf
+                    model.save(dir_path + f'/models/_{idx}_{best_fitness}.mph')
+                client.clear()
                 performance.append(one_perf)
                 dice_metric.append(one_dice)
 

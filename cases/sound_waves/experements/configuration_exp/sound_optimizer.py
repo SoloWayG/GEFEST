@@ -5,7 +5,7 @@ from gefest.tools.optimizers.optimizer import Optimizer
 
 def configurate_optimizer(pop_size: int,
                           crossover_rate: int,
-                          mutation_rate: int,
+                          mutation_rate: float,
                           task_setup):
     """
     ::TODO::

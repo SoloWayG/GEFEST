@@ -7,6 +7,7 @@ import numpy as np
 
 from gefest.core.algs.geom.validation import distance_between_points
 from gefest.core.algs.postproc.resolve_errors import postprocess
+from gefest.core.geometry.geometry_2d import Geometry2D
 from gefest.core.opt.constraints import check_constraints
 from gefest.tools.samplers.standard.standard import MAX_ITER, NUM_PROC, StandardSampler
 from gefest.core.structure.domain import Domain
@@ -210,7 +211,6 @@ def points_mutation(new_structure: Structure, polygon_to_mutate_idx, domain: Dom
 def mutate_worker(args):
     structure, changes_num, domain = args[0], args[1], args[2]
     polygon_mutation_probab = 0.5
-
     try:
         new_structure = copy.deepcopy(structure)
 

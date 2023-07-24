@@ -20,7 +20,7 @@ archs = count_files(path ='./History_0', like ='performance_')
 pwd = os.getcwd()
 dir_name = os.path.basename(pwd)
 
-micro = Microphone.arrs['best']
+micro = Microphone().array()
 ####
 LAST = True#Set what a case (with point or half perimeter)
 ####
@@ -32,19 +32,19 @@ for a in range(lenght):
     best_fit.append([i[0] for i in fitness])
 
 for i in range(len(best_fit)):
-    if i < len(best_fit)-1:
+    #if i < len(best_fit)-1:
         
-        plt.plot(best_fit[i],label=f'struct_with_{len(micro[i])}_pints')
-        plt.xlabel("Итерации")
-        plt.ylabel("Fitness")
-        plt.legend()
+    plt.plot(best_fit[i],label=f'struct_with_{sum([len(i) for i in micro[i]])}_pints')
+    plt.xlabel("Итерации")
+    plt.ylabel("Fitness")
+    plt.legend()
 
-    else:
-
-        plt.plot(best_fit[i],label=f'struct_half_perimeter_pints')
-        plt.xlabel("Итерации")
-        plt.ylabel("Fitness")
-        plt.title(f'Сходимость_{dir_name}')
-        plt.legend()
+    # else:
+    #
+    #     plt.plot(best_fit[i],label=f'struct_half_perimeter_pints')
+    #     plt.xlabel("Итерации")
+    #     plt.ylabel("Fitness")
+    #     plt.title(f'Сходимость_{dir_name}')
+    #     plt.legend()
 plt.grid()
 plt.show()
