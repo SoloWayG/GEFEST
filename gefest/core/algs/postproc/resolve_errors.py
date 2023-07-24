@@ -46,14 +46,11 @@ def postprocess(structure: Structure, domain: Domain) -> Structure:
             if unclosed_poly(local_structure, domain) and domain.is_closed:
                 corrected_structure.polygons[i] = _correct_unclosed_poly(poly)
             if self_intersection(local_structure):
-                print("Щас может все сломаться")
                 corrected_structure.polygons[i] = _correct_self_intersection(poly, domain)
             if out_of_bound(local_structure, domain):
                 corrected_structure.polygons[i] = _correct_wrong_point(poly, domain)
     except AttributeError:
         return structure
-    if distance_between_points(corrected_structure, domain):
-        print("ВСЕ ХУЙня ПОСТПРОЦЕСС ВСЕ СЛОМАЛ")
     #  Fixing proximity between polygons
     if too_close(structure, domain):
         corrected_structure = _correct_closeness(corrected_structure, domain)

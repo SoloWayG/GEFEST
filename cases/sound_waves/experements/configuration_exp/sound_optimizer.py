@@ -1,5 +1,5 @@
 from gefest.tools.optimizers.GA.GA import GA
-from gefest.core.opt.operators.operators import default_operators
+from gefest.core.opt.operators.operators import default_operators,point_crossover
 from gefest.tools.optimizers.optimizer import Optimizer
 
 
@@ -21,7 +21,7 @@ def configurate_optimizer(pop_size: int,
                        mutation_value_rate=[])
 
     ga_optimizer = GA(params=params,
-                      evolutionary_operators=default_operators(),
+                      evolutionary_operators=point_crossover(),
                       task_setup=task_setup)
 
     # ------------
