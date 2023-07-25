@@ -1,12 +1,3 @@
-import pickle5 as pickle
-from gefest.core.viz.struct_vizualizer import StructVizualizer
-import timeit
-import matplotlib.pyplot as plt
-import numpy as np
-from gefest.core.opt.gen_design import design
-from cases.breakwaters.configuration_de import bw_domain
-from cases.microfluidic.configuration_standard import sd_domain
-import gc
 import os
 import pickledb
 import numpy as np

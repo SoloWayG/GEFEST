@@ -1,5 +1,7 @@
 import timeit
 import pickle
+
+from gefest.core.opt.operators.operators import point_crossover
 from gefest.core.structure.prohibited import create_prohibited
 from gefest.core.opt.gen_design import design
 from gefest.core.structure.structure import get_random_structure
@@ -28,7 +30,7 @@ opt_params.n_points = 10
 opt_params.m_rate = 0.6
 opt_params.c_rate = 0.4
 is_extra = True
-LOSS = 'MSE'
+LOSS = 'MSE_plus_dice'
 micro = Microphone().array()
 point_cnt_mes = len(micro)
 """
@@ -43,7 +45,7 @@ figure_file_names = os.listdir('Comsol_points/figuers')#Search names of txt file
 figure_names = [i.split(sep='.')[0] for i in figure_file_names]#Split name of files for create dir name, based on prepared polygons names
 for n, fig in enumerate(figure_names):
     ################################
-    new_path = f'2107_cross{opt_params.c_rate}__exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}_extra_{is_extra}_point_measurement_{point_cnt_mes}/{fig}_exp'     #path to create new dir of experement iteration
+    new_path = f'2507_300dur_extrahalf_cross{opt_params.c_rate}__exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}_extra_{is_extra}_point_measurement_{point_cnt_mes}/{fig}_exp'     #path to create new dir of experement iteration
     ###############################
     if os.path.exists(new_path):#
         shutil.rmtree(new_path) #
@@ -75,7 +77,8 @@ for n, fig in enumerate(figure_names):
             pop_size=opt_params.pop_size,
             crossover_rate=opt_params.c_rate,
             mutation_rate=opt_params.m_rate,
-            task_setup=task_setup
+            task_setup=task_setup,
+            evolutionary_operators=point_crossover
         )
 
         # ------------
@@ -90,44 +93,14 @@ for n, fig in enumerate(figure_names):
             sampler=sampler,
             optimizer=optimizer,
             extra=is_extra,
-            path=new_path+f'/History_{i}'
+            path=new_path+f'/History_{i}',
+            iters=i,
+            extra_break=opt_params.n_steps//2
         )
         spend_time = timeit.default_timer() - start
         print(f"spent time {spend_time} sec")
 
         with open(new_path+f"/optimized_structure_{i}.pickle", "wb") as handle:
             pickle.dump(optimized_pop, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        #next = i+1
 
-    # ##########calculate case with half area microphones
-    # estimator = sound_estimator.configurate_estimator(
-    #         domain=domain, path_best_struct=new_path+"/best_structure.pickle",iters=None)
-    #
-    # sampler = sound_sampler.configurate_sampler(domain=domain)
-    #
-    # optimizer = sound_optimizer.configurate_optimizer(
-    #     pop_size=opt_params.pop_size,
-    #     crossover_rate=opt_params.c_rate,
-    #     mutation_rate=opt_params.m_rate,
-    #     task_setup=task_setup,
-    # )
-    #
-    # # ------------
-    # # Generative design stage
-    # # ------------
-    #
-    # start = timeit.default_timer()
-    # optimized_pop = design(
-    #     n_steps=opt_params.n_steps,
-    #     pop_size=opt_params.pop_size,
-    #     estimator=estimator,
-    #     sampler=sampler,
-    #     optimizer=optimizer,
-    #     extra=is_extra,
-    #     path=new_path+f'/History_{next}'
-    # )
-    # spend_time = timeit.default_timer() - start
-    # print(f"spent time {spend_time} sec")
-    #
-    # with open(new_path+f"/optimized_structure_{next}.pickle", "wb") as handle:
-    #     pickle.dump(optimized_pop, handle, protocol=pickle.HIGHEST_PROTOCOL)
+

@@ -14,7 +14,7 @@ from cases.sound_waves.experements.poly_from_point import poly_from_comsol_txt
 # If the value is False, pretrained models will be selected
 # otherwise put path to your model
 opt_params.is_closed = True
-opt_params.pop_size = 25
+opt_params.pop_size = 35
 opt_params.n_steps = 30
 opt_params.n_polys = 1
 opt_params.n_points = 10
@@ -41,7 +41,7 @@ figure_names = [i.split(sep='.')[0] for i in figure_file_names]#Split name of fi
 print(figure_names)
 best_structure = poly_from_comsol_txt(path=path_fig+figure_file_names[0])#upload new best struct from figure files
 
-new_path = f'2007_no_del_add_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}_extra_{is_extra}'     #path to create new dir of experement iteration
+new_path = f'2507_no_del_add_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}_extra_{is_extra}'     #path to create new dir of experement iteration
 ###############################
 if os.path.exists(new_path):#
     shutil.rmtree(new_path) #
@@ -81,7 +81,8 @@ optimized_pop = design(
     sampler=sampler,
     optimizer=optimizer,
     path=new_path+f'/History',
-    extra=True,
+    extra=is_extra,
+    extra_break=opt_params.n_steps//2
 )
 spend_time = timeit.default_timer() - start
 print(f"spent time {spend_time} sec")

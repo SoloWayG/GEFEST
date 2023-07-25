@@ -66,23 +66,25 @@ class Comsol:
                 model.save(self.dir_path + f'/models/_BAD_{time.time()}.mph')
         except Exception as ex:
             print(ex)
+            model.save(self.dir_path + f'/models/CRASH.mph')
             self.client.clear()
-            return 0.0
+            return 0.0,model,0,self.dir_path,self.client
 
         idx = self._save_simulation_result(structure, model)
 
         try:
             if receivers == 2:
                 out = [model.evaluate('avep_out'),model.evaluate('avep_out2')]
-                target_evo = list(out[0])+list(out[1])
+                target_evo = list(out[0][72:])+list(out[1][72:])
                 #target_evo = np.array(target_evo) - np.array(total_aveop())
             else:
                 out = model.evaluate('avep_out')
-                target_evo = out
+                target_evo = out[72:]
         except Exception as ex:
             print(ex)
+            model.save(self.dir_path + f'/models/CRASH.mph')
             self.client.clear()
-            return 0.0
+            return 0.0,model,idx,self.dir_path,self.client
 
         #self.client.clear()
 

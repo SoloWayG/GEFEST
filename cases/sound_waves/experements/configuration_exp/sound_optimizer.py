@@ -6,7 +6,8 @@ from gefest.tools.optimizers.optimizer import Optimizer
 def configurate_optimizer(pop_size: int,
                           crossover_rate: int,
                           mutation_rate: float,
-                          task_setup):
+                          task_setup,
+                          evolutionary_operators=default_operators):
     """
     ::TODO::
     Create abstract interface for configurations
@@ -21,7 +22,7 @@ def configurate_optimizer(pop_size: int,
                        mutation_value_rate=[])
 
     ga_optimizer = GA(params=params,
-                      evolutionary_operators=point_crossover(),
+                      evolutionary_operators=evolutionary_operators(),
                       task_setup=task_setup)
 
     # ------------

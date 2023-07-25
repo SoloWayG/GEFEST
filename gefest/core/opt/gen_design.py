@@ -11,7 +11,8 @@ def design(n_steps: int,
            sampler,
            optimizer,
            extra=False,
-           path = 'HistoryFiles'):
+           path = 'HistoryFiles',
+           extra_break=15):
     """
     Generative design procedure
     :param n_steps: (Int) number of generative design steps
@@ -86,12 +87,13 @@ def design(n_steps: int,
         if not optimizer or extra:
             if not optimizer:
                 samples = sampler.sample(n_samples=pop_size)
-            else:
-                extra_samples = sampler.sample(n_samples=pop_size)
+            elif i<extra_break:#stop extra sampling after extra_break iterations
+                extra_samples = sampler.sample(n_samples=(pop_size-i))
                 samples = samples + extra_samples
+        print('len samples',len(samples))
         if i == n_steps-1:
             i +=1
-            performance, dice_metric  = estimator.estimate(population=samples)
+            performance, dice_metric = estimator.estimate(population=samples)
 
             # Choose best and save the results
             performance, samples,dice_metric = _remain_best(performance, samples,dice_metric)

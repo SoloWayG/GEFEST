@@ -23,15 +23,15 @@ def crossover_worker(args):
 
     s1, s2, domain = args[0], args[1], args[2]
     geometry = domain.geometry
-    poly_lenght = (len(s1.polygons[0].points)+len(s2.polygons[0].points))//2 #set size (count of points) of new poly
-    poly_lenght = random.randint(domain.min_points_num, poly_lenght) #random choose count of points
+    poly_lenght = (len(s1.polygons[0].points)+len(s2.polygons[0].points))//2     #set size (count of points) of new poly
+    poly_lenght = random.randint(domain.min_points_num, poly_lenght)            #random choose count of points
 
-    points_for_crossovering = [i.coords()[:2] for i in s1.polygons[0].points[:-1]]#take points from first poly as a coords. Without last point
+    points_for_crossovering = [i.coords()[:2] for i in s1.polygons[0].points[:-1]] #take points from first poly as a coords. Without last point
     for i in [i.coords()[:2] for i in s2.polygons[0].points[:-1]]:
         if i not in points_for_crossovering:
-            points_for_crossovering.append(i)#Adding points from second polygon, if that points not in firts poly
-    new_poly_points =[]#init child poly
-    dist_between_poitns = domain.dist_between_points#init min distance between point< to validate poly side size
+            points_for_crossovering.append(i)                                       #Adding points from second polygon, if that points not in firts poly
+    new_poly_points =[]                                                              #init child poly
+    dist_between_poitns = domain.dist_between_points                                #init min distance between point< to validate poly side size
     new_structure = copy.deepcopy(points_for_crossovering)
     trys=0
     while len(new_poly_points) < poly_lenght:
@@ -46,10 +46,10 @@ def crossover_worker(args):
         if rndchoice not in new_poly_points:
             new_poly_points.append(rndchoice)
         ind = len(new_poly_points) - 1
-        if ind > 0:#starting from second point, we cheking distance between i-1 and i points
+        if ind > 0:                     #starting from second point, we cheking distance between i-1 and i points
             if norm(np.array(new_poly_points[ind]) - np.array(new_poly_points[ind - 1]), ord=1) < dist_between_poitns:
-                del new_poly_points[ind]# if distance is too short - delete that point from child poly
-        if len(new_poly_points) == poly_lenght:#check distance between last and first points. It need to close poly
+                del new_poly_points[ind]    # if distance is too short - delete that point from child poly
+        if len(new_poly_points) == poly_lenght: #check distance between last and first points. It need to close poly
             if norm(np.array(new_poly_points[-1]) - np.array(new_poly_points[0]), ord=1) < dist_between_poitns:
                 del new_poly_points[-1]
         if len(new_poly_points) == poly_lenght and domain.is_closed:
@@ -77,7 +77,7 @@ def crossover_worker(args):
     # result.extend(copy.deepcopy(part_2))
     new_structure = Structure(polygons=[polygon_crossered])
     #new_structure.polygons = polygon_crossered
-    print('new_structure cross',new_structure.polygons[0].points)
+
     # Postprocessing for new structure
     new_structure = postprocess(new_structure, domain)
     constraints = check_constraints(structure=new_structure, domain=domain)
@@ -97,8 +97,6 @@ def crossover_worker(args):
 def crossover(s1: Structure, s2: Structure, domain: Domain, rate=0.4):
     random_val = random.random()
     if random_val >= rate:# or len(s1.polygons) == 1 or len(s2.polygons) == 1:
-    #     # In the case when the structures consist of only one polygon,
-    #     # the transformation is not performed
         if random.random() > 0.5:
             return s1
         else:
@@ -122,5 +120,5 @@ def crossover(s1: Structure, s2: Structure, domain: Domain, rate=0.4):
         if structure is not None:
             new_structure = structure
             break
-    print('new_structure cross after process', new_structure.polygons[0].points)
+
     return new_structure

@@ -21,16 +21,28 @@ def total_aveop(sep = '\t',
     res1 = pd.read_csv(path_to_aveop_1, sep=sep, header=None)
     res2 = pd.read_csv(path_to_aveop_2, sep=sep, header=None)
 
-    aveop_1 = [float(round(res1.iloc[i, 1], 2)) for i in res1.index]
-    aveop_2 = [float(round(res2.iloc[i, 1], 2)) for i in res2.index]
-    tot_aveop = aveop_1+aveop_2
+    aveop_1 = [float(round(res1.iloc[i, 1], 2)) for i in res1.index][72:]
+    aveop_2 = [float(round(res2.iloc[i, 1], 2)) for i in res2.index][72:]
+
+
+    # mean_left = np.mean(abs(np.array(aveop_1)))
+    # mean_right = np.mean(abs(np.array(aveop_2)))
+    # power = mean_left/mean_right
+    # powered_avp2 = np.array(aveop_2)*10
+    # max_aveop = np.max(abs(powered_avp2))
+    tot_aveop = aveop_1 + aveop_2
     return np.array(tot_aveop)
-#print(len(total_aveop()))
-#print(len(aveop_1+aveop_2))
-#points = [Point(i[0], i[1]) for i in np.array(points)]
-# print('aveop',total_aveop())
-# star = np.array(total_aveop(path1='/gefest/tools/estimators/simulators/comsol/sound/model/aveop1_star.txt',
-#                   path2='/gefest/tools/estimators/simulators/comsol/sound/model/aveop2_star.txt'))
+#plt.plot(total_aveop()[0])
+#plt.show()
+# print(len(total_aveop()))
+# #print(len(total_aveop()))
+# #print(len(aveop_1+aveop_2))
+# #points = [Point(i[0], i[1]) for i in np.array(points)]
+# # print('aveop',total_aveop())
+# star = total_aveop(path1='/gefest/tools/estimators/simulators/comsol/sound/model/aveop1_star.txt',
+#                   path2='/gefest/tools/estimators/simulators/comsol/sound/model/aveop2_star.txt')
+# print(len(star))
+# print(total_aveop(),star)
 # print(list(star - np.array(total_aveop())))
 #
 # #plt.plot(abs(np.array(total_aveop())),label='total_aveop')

@@ -116,7 +116,7 @@ class SoundSimulator:
         # Source position is the center of the map
         self.s_y = self.size_y // 2
         #self.s_x = self.size_x // 2
-        self.s_x = 0
+        self.s_x = self.size_x-1
         self.pressure = np.zeros((self.size_y, self.size_x))
         self.pressure_hist = np.zeros((self.duration, self.size_y, self.size_x))
         # outflow velocities from each cell

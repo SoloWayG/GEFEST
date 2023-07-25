@@ -8,8 +8,17 @@ class Microphone:
             [[self.matrix[0, -1], self.matrix[120 // 2, -1], self.matrix[-1, -1]]],
             [[self.matrix[0, 120 // 2], self.matrix[0, 3 * 120 // 4], self.matrix[0, -1], self.matrix[3 * 120 // 4, -1], self.matrix[120 // 2, -1], self.matrix[120 // 4, -1], self.matrix[-1, -1],
              self.matrix[-1, 3 * 120 // 4], self.matrix[-1, 120 // 2]]],
-            [self.matrix[0, 60:-1],self.matrix[:,-1],self.matrix[-1,(120 // 2):-1]],
-            [self.matrix[0, 60:-1],self.matrix[:,-1],self.matrix[-1,(120 // 2):-1],self.matrix[11:109,55],self.matrix[109,55:109],self.matrix[11:109,109],self.matrix[10,55:109]]
+            [self.matrix[0, 59:-1],self.matrix[:,-1],self.matrix[-1,59:-1]],
+            [self.matrix[0, 59:-1],self.matrix[:,-1],self.matrix[-1,59:-1],self.matrix[11:109,55],self.matrix[109,55:109],self.matrix[11:109,109],self.matrix[10,55:109]]
+            ]
+        return arrs
+    def reflect_array(self):
+        arrs =[
+            [[self.matrix[0, 0], self.matrix[120 // 2, 0], self.matrix[-1, 0]]],
+            [[self.matrix[0, 120 // 2], self.matrix[0,  120 // 4], self.matrix[0, 0], self.matrix[3 * 120 // 4, 0], self.matrix[120 // 2, 0], self.matrix[120 // 4, 0], self.matrix[-1, 0],
+             self.matrix[-1, 120 // 4], self.matrix[-1, 120 // 2]]],
+            [self.matrix[0, :60],self.matrix[:,0],self.matrix[-1,:60]],
+            [self.matrix[0, :60],self.matrix[:,0],self.matrix[-1,:60],self.matrix[11:109,55],self.matrix[109,55:109],self.matrix[11:109,109],self.matrix[10,55:109]]
             ]
         return arrs
     coords = {'points': [

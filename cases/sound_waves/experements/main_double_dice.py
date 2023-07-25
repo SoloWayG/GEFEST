@@ -24,7 +24,7 @@ opt_params.n_polys = 1
 opt_params.n_points = 10
 opt_params.m_rate = 0.75
 is_extra = True
-LOSS = 'MSE_dice_metric'
+LOSS = 'MSE_plus_dice'
 micro = Microphone().array()
 point_cnt_mes = len(micro)
 """
@@ -88,7 +88,6 @@ for n, fig in enumerate(figure_names):
             optimizer=optimizer,
             extra=is_extra,
             path=new_path+f'/History_{i}',
-            iters=i,
             extra_break=opt_params.n_steps//2
         )
         spend_time = timeit.default_timer() - start

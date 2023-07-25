@@ -41,15 +41,26 @@ def configurate_estimator(domain: "Domain", path_best_struct=None,receivers = 2,
         client_.clear()
         print(best_spl,len(best_spl))
         best_spl = np.nan_to_num(best_spl, nan=0, neginf=0, posinf=0)
-        best_spl = np.array(best_spl)-total_aveop()
+        best_spl = np.array(best_spl)-total_aveop()#Cleared from noise
+        #############
+        mean_left=np.mean(abs(best_spl[:len(best_spl)//2]))
+        mean_right=np.mean(abs(best_spl[len(best_spl)//2:]))
+        powering = mean_left/mean_right
+        best_spl = np.array(list(best_spl[:len(best_spl) // 2]) + list(best_spl[len(best_spl) // 2:] * powering))
+        max_ref = np.max(abs(best_spl))
+        best_spl = best_spl/max_ref
         with open(best_spl_path, "wb") as handle:
             pickle.dump(best_spl, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     # Loss for minimizing, it is optional function
     def loss(struct: Structure, estimator):
         spl, model, idx, dir_path, client = estimator.estimate(struct)
+        if spl == 0:
+            return np.inf, 0, model, idx, dir_path, client
         current_spl = np.nan_to_num(spl, nan=0, neginf=0, posinf=0)
         current_spl = np.array(current_spl) - total_aveop()
+        current_spl = np.array(list(current_spl[:len(current_spl) // 2]) + list(current_spl[len(current_spl) // 2:] * powering))
+        current_spl = current_spl/max_ref
         l_f = np.sum((best_spl - current_spl)**2)/len(np.array(current_spl))
 
         dice_metric = dice(best_structure,struct)
