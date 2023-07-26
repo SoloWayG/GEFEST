@@ -88,7 +88,7 @@ def design(n_steps: int,
             if not optimizer:
                 samples = sampler.sample(n_samples=pop_size)
             elif i<extra_break:#stop extra sampling after extra_break iterations
-                extra_samples = sampler.sample(n_samples=(pop_size-i))
+                extra_samples = sampler.sample(n_samples=(pop_size))
                 samples = samples + extra_samples
         print('len samples',len(samples))
         if i == n_steps-1:
