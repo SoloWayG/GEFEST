@@ -100,7 +100,7 @@ class SoundSimulator:
         self.domain = domain
         self.map_size = (round(1.2 * domain.max_y), round(1.2 * domain.max_x))
         self.size_y, self.size_x = self.map_size
-        self.duration = 250
+        self.duration = 300
         # obstacle_map handling
         if (
             obstacle_map is not None
