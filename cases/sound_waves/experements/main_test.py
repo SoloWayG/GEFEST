@@ -6,7 +6,7 @@ from gefest.core.structure.structure import get_random_structure
 from cases.main_conf import opt_params
 from cases.sound_waves.experements.configuration_exp import (
     sound_domain,
-    sound_estimator_double as sound_estimator,
+    sound_estimator,
     sound_optimizer,
     sound_sampler,
 )
@@ -18,13 +18,13 @@ from cases.sound_waves.experements.microphone_points import Microphone
 # If the value is False, pretrained models will be selected
 # otherwise put path to your model
 opt_params.is_closed = True
-opt_params.pop_size = 35
+opt_params.pop_size = 20
 opt_params.n_steps = 40
 opt_params.n_polys = 1
 opt_params.n_points = 10
 opt_params.m_rate = 0.75
 is_extra = True
-LOSS = 'MSE_dice_metric'
+LOSS = 'MSE'
 micro = Microphone().array()
 point_cnt_mes = len(micro)
 """
@@ -39,7 +39,7 @@ figure_file_names = os.listdir('Comsol_points/figuers')#Search names of txt file
 figure_names = [i.split(sep='.')[0] for i in figure_file_names]#Split name of files for create dir name, based on prepared polygons names
 for n, fig in enumerate(figure_names):
     ################################
-    new_path = f'2707_DOUBLE_dur250_extra_05_of_steps_exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}_extra_{is_extra}_point_measurement_{point_cnt_mes}/{fig}_exp'     #path to create new dir of experement iteration
+    new_path = f'2607_dur300_extra_full_of_steps_exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}/{fig}_exp'     #path to create new dir of experement iteration
     ###############################
     if os.path.exists(new_path):#
         shutil.rmtree(new_path) #
@@ -88,8 +88,7 @@ for n, fig in enumerate(figure_names):
             optimizer=optimizer,
             extra=is_extra,
             path=new_path+f'/History_{i}',
-            iters=i,
-            extra_break=opt_params.n_steps//2
+            extra_break=opt_params.n_steps
         )
         spend_time = timeit.default_timer() - start
         print(f"spent time {spend_time} sec")

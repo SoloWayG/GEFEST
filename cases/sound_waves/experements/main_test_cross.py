@@ -23,12 +23,12 @@ from cases.sound_waves.experements.microphone_points import Microphone
 # If the value is False, pretrained models will be selected
 # otherwise put path to your model
 opt_params.is_closed = True
-opt_params.pop_size = 20
+opt_params.pop_size = 30
 opt_params.n_steps = 50
 opt_params.n_polys = 1
 opt_params.n_points = 10
 opt_params.m_rate = 0.6
-opt_params.c_rate = 0.4
+opt_params.c_rate = 0.3
 is_extra = True
 LOSS = 'MSE_plus_dice'
 micro = Microphone().array()
@@ -45,7 +45,7 @@ figure_file_names = os.listdir('Comsol_points/figuers')#Search names of txt file
 figure_names = [i.split(sep='.')[0] for i in figure_file_names]#Split name of files for create dir name, based on prepared polygons names
 for n, fig in enumerate(figure_names):
     ################################
-    new_path = f'2507_300dur_extrahalf_cross{opt_params.c_rate}__exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}_extra_{is_extra}_point_measurement_{point_cnt_mes}/{fig}_exp'     #path to create new dir of experement iteration
+    new_path = f'2607_300dur_halfextra_cross{opt_params.c_rate}__exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}/{fig}_exp'     #path to create new dir of experement iteration
     ###############################
     if os.path.exists(new_path):#
         shutil.rmtree(new_path) #
@@ -94,7 +94,6 @@ for n, fig in enumerate(figure_names):
             optimizer=optimizer,
             extra=is_extra,
             path=new_path+f'/History_{i}',
-            iters=i,
             extra_break=opt_params.n_steps//2
         )
         spend_time = timeit.default_timer() - start
