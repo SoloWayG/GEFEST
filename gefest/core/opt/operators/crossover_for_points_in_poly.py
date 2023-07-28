@@ -16,9 +16,9 @@ NUM_PROC = 1
 
 def crossover_worker(args):
     """
-    That crossover take two polygons (stracruters with only 1 poly), than poits of polys placed to common point cloud.
+    That crossover take two polygons (structures with only 1 poly), then points of polys placed to common point cloud.
     Then, from this cloud crossover will create a new poly, that will consist of previous polygons.
-    In idea, this crossover must creat intermediate polugon, from 2 paretn polys
+    In idea, this crossover must creat intermediate polygon, from 2 paretns polys
     """
 
     s1, s2, domain = args[0], args[1], args[2]
@@ -97,16 +97,14 @@ def crossover_worker(args):
 def crossover(s1: Structure, s2: Structure, domain: Domain, rate=0.4):
     random_val = random.random()
     if random_val >= rate:# or len(s1.polygons) == 1 or len(s2.polygons) == 1:
-        if random.random() > 0.5:
-            return s1
-        else:
-            return s2
+
+        return s1
     if len(s1.polygons) == 0:
         return s2
     elif len(s2.polygons) == 0:
         return s1
 
-    new_structure = s2
+    new_structure = s1
 
     if NUM_PROC > 1:
         # Calculations on different processor cores

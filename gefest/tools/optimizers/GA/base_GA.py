@@ -123,19 +123,19 @@ class BaseGA:
         np.random.shuffle(selected)
         ####
         reproduced = []
-        for _ in range(len(selected)):
-            i1 = random.randint(0, len(selected)-1)#set random index
-            i2 = random.randint(0, len(selected)-1)
-            while i1!=i2 and i1 not in reproduced:
-                i1 = random.randint(0, len(selected)-1)
-                i2 = random.randint(0, len(selected)-1)
-            reproduced.append(i1)
-            p1 = selected[i1]
-            p2 = selected[i2]
+        # for _ in range(len(selected)):
+        #     i1 = random.randint(0, len(selected)-1)#set random index
+        #     i2 = random.randint(0, len(selected)-1)
+        #     while i1!=i2 and i1 not in reproduced:
+        #         i1 = random.randint(0, len(selected)-1)
+        #         i2 = random.randint(0, len(selected)-1)
+        #     reproduced.append(i1)
+        #     p1 = selected[i1]
+        #     p2 = selected[i2]
         ####
-        # for pair_index in range(0, len(selected) - 1):
-        #     p1 = selected[pair_index]
-        #     p2 = selected[pair_index + 1]
+        for pair_index in range(0, len(selected) - 1):
+            p1 = selected[pair_index]
+            p2 = selected[pair_index + 1]
 
             child_gen = self.crossover(s1=p1.genotype, s2=p2.genotype,
                                        domain=self.task_setup.domain,

@@ -1,7 +1,7 @@
 import timeit
 import pickle
 
-from gefest.core.opt.operators.operators import point_crossover
+from gefest.core.opt.operators.operators import default_operators
 from gefest.core.structure.prohibited import create_prohibited
 from gefest.core.opt.gen_design import design
 from gefest.core.structure.structure import get_random_structure
@@ -16,9 +16,6 @@ from poly_from_point import poly_from_comsol_txt
 import numpy as np
 import os
 import shutil
-from gefest.core.structure.structure import Structure
-from gefest.core.structure.point import Point
-from gefest.core.structure.polygon import Polygon
 from cases.sound_waves.experements.microphone_points import Microphone
 # If the value is False, pretrained models will be selected
 # otherwise put path to your model
@@ -27,8 +24,8 @@ opt_params.pop_size = 50
 opt_params.n_steps = 100
 opt_params.n_polys = 1
 opt_params.n_points = 10
-opt_params.m_rate = 0.6
-opt_params.c_rate = 0.3
+opt_params.m_rate = 0.9
+opt_params.c_rate = 0
 is_extra = True
 LOSS = 'MSE'
 micro = Microphone().array()
@@ -45,7 +42,7 @@ figure_file_names = os.listdir('Comsol_points/figuers')#Search names of txt file
 figure_names = [i.split(sep='.')[0] for i in figure_file_names]#Split name of files for create dir name, based on prepared polygons names
 for n, fig in enumerate(figure_names):
     ################################
-    new_path = f'BASE_2_2807_025extra_200dur_cross{opt_params.c_rate}__exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}/{fig}_exp'     #path to create new dir of experement iteration
+    new_path = f'Base_2807_025extra_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}/{fig}_exp'     #path to create new dir of experement iteration
     ###############################
     if os.path.exists(new_path):#
         shutil.rmtree(new_path) #
@@ -78,7 +75,8 @@ for n, fig in enumerate(figure_names):
             crossover_rate=opt_params.c_rate,
             mutation_rate=opt_params.m_rate,
             task_setup=task_setup,
-            evolutionary_operators=point_crossover
+            evolutionary_operators=default_operators
+
         )
 
         # ------------
@@ -101,5 +99,4 @@ for n, fig in enumerate(figure_names):
 
         with open(new_path+f"/optimized_structure_{i}.pickle", "wb") as handle:
             pickle.dump(optimized_pop, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-
+        #next = i+1

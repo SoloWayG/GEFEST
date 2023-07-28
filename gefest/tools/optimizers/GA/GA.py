@@ -11,15 +11,15 @@ class GA(BaseGA):
         self.init_populations(population)
         self.init_fitness(performance)
         selected = self.roulette_selection()
-
+        #selected =self.tournament_selection()
         self._pop = sorted(selected, key=lambda x: x.fitness)
 
-        #un_pop = set()
-        # self._pop = \
-        #     [un_pop.add(str(ind.genotype)) or ind for ind in self._pop
-        #      if str(ind.genotype) not in un_pop]
+        un_pop = set()
+        self._pop = \
+            [un_pop.add(str(ind.genotype)) or ind for ind in self._pop
+             if str(ind.genotype) not in un_pop]
 
-        #self._pop.extend(self.reproduce(self._pop))
+        self._pop.extend(self.reproduce(self._pop))
         pop_reproduced = self.reproduce(self._pop)
         population = [ind.genotype for ind in pop_reproduced]
 

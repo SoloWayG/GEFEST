@@ -33,16 +33,20 @@ def configurate_estimator(domain: "Domain", path_best_struct=None, iters = None)
     def loss(struct: Structure, estimator):
 
         spl = estimator.estimate(struct)
+        spl = np.nan_to_num(spl, nan=0, neginf=0, posinf=0)
+
+
         micro_spl = Microphone(matrix=spl).array()
 
 
         spl = np.concatenate(micro_spl[iters])
-        lenght = len(spl)
+        lenght = len(spl[spl != 0])
+        print(lenght)
 
-        current_spl = np.nan_to_num(spl, nan=0, neginf=0, posinf=0)
+
         metric = dice(best_structure, struct)
         print('Dice is',dice(best_structure, struct))
-        l_f = np.sum((best_spl - current_spl)**2)/lenght #+ (1-dice(best_structure, struct))*10
+        l_f = np.sum(abs(best_spl - spl))/lenght #+ (1-dice(best_structure, struct))*10
 
 
         return l_f, metric
