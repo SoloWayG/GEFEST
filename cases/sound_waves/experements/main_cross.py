@@ -30,7 +30,7 @@ opt_params.n_points = 10
 opt_params.m_rate = 0.6
 opt_params.c_rate = 0.3
 is_extra = True
-LOSS = 'MSE_DICE'
+LOSS = 'MSE'
 micro = Microphone().array()
 point_cnt_mes = len(micro)
 """
@@ -45,7 +45,7 @@ figure_file_names = os.listdir('Comsol_points/figuers')#Search names of txt file
 figure_names = [i.split(sep='.')[0] for i in figure_file_names]#Split name of files for create dir name, based on prepared polygons names
 for n, fig in enumerate(figure_names):
     ################################
-    new_path = f'BASE_3_2807_025extra_200dur_cross{opt_params.c_rate}__exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}/{fig}_exp'     #path to create new dir of experement iteration
+    new_path = f'test_2_2807_025extra_200dur_cross{opt_params.c_rate}__exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}/{fig}_exp'     #path to create new dir of experement iteration
     ###############################
     if os.path.exists(new_path):#
         shutil.rmtree(new_path) #
