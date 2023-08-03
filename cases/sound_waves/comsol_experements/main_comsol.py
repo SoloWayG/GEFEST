@@ -82,7 +82,7 @@ optimized_pop = design(
     optimizer=optimizer,
     path=new_path+f'/History',
     extra=is_extra,
-    extra_break=opt_params.n_steps//2
+    extra_break=opt_params.n_steps
 )
 spend_time = timeit.default_timer() - start
 print(f"spent time {spend_time} sec")

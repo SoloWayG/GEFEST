@@ -12,7 +12,7 @@ def design(n_steps: int,
            optimizer,
            extra=False,
            path = 'HistoryFiles',
-           extra_break=150):
+           extra_break=250):
     """
     Generative design procedure
     :param n_steps: (Int) number of generative design steps

@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from gefest.tools.optimizers.GA.base_GA import BaseGA
 
 
@@ -11,6 +13,7 @@ class GA(BaseGA):
         self.init_populations(population)
         self.init_fitness(performance)
         selected = self.roulette_selection()
+        best_individs = deepcopy(population[:5])
         #selected =self.tournament_selection()
         self._pop = sorted(selected, key=lambda x: x.fitness)
 
@@ -21,6 +24,7 @@ class GA(BaseGA):
 
         self._pop.extend(self.reproduce(self._pop))
         pop_reproduced = self.reproduce(self._pop)
+        population += best_individs
         population = [ind.genotype for ind in pop_reproduced]
 
         return population
