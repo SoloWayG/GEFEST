@@ -17,12 +17,12 @@ class GA(BaseGA):
         #selected =self.tournament_selection()
         self._pop = sorted(selected, key=lambda x: x.fitness)
 
-        un_pop = set()
-        self._pop = \
-            [un_pop.add(str(ind.genotype)) or ind for ind in self._pop
-             if str(ind.genotype) not in un_pop]
-
-        self._pop.extend(self.reproduce(self._pop))
+        # un_pop = set()
+        # self._pop = \
+        #     [un_pop.add(str(ind.genotype)) or ind for ind in self._pop
+        #      if str(ind.genotype) not in un_pop]
+        #
+        # self._pop.extend(self.reproduce(self._pop))
         pop_reproduced = self.reproduce(self._pop)
         population += best_individs
         population = [ind.genotype for ind in pop_reproduced]
