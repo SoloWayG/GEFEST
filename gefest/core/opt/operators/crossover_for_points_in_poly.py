@@ -23,8 +23,8 @@ def crossover_worker(args):
 
     s1, s2, domain = args[0], args[1], args[2]
     geometry = domain.geometry
-    poly_lenght = (len(s1.polygons[0].points)+len(s2.polygons[0].points))//2     #set size (count of points) of new poly
-    poly_lenght = random.randint(domain.min_points_num, poly_lenght)            #random choose count of points
+    poly_sum = (len(s1.polygons[0].points)+len(s2.polygons[0].points))//2     #set size (count of points) of new poly
+    poly_lenght = random.randint(domain.min_points_num, poly_sum)            #random choose count of points
 
     points_for_crossovering = [i.coords()[:2] for i in s1.polygons[0].points[:-1]] #take points from first poly as a coords. Without last point
     for i in [i.coords()[:2] for i in s2.polygons[0].points[:-1]]:

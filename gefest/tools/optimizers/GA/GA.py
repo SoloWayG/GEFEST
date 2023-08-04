@@ -24,7 +24,7 @@ class GA(BaseGA):
         #
         # self._pop.extend(self.reproduce(self._pop))
         pop_reproduced = self.reproduce(self._pop)
-        population += best_individs
-        population = [ind.genotype for ind in pop_reproduced]
 
+        population = [ind.genotype for ind in pop_reproduced]
+        population += best_individs
         return population

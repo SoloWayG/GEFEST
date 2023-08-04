@@ -28,7 +28,6 @@ def configurate_estimator(domain: "Domain", path_best_struct=None, iters = None)
         best_spl = np.nan_to_num(best_spl, nan=0, neginf=0, posinf=0)
         micro = Microphone(matrix=best_spl).array()
         best_spl = np.concatenate(micro[iters])
-
     # Loss for minimizing, it is optional function
     def loss(struct: Structure, estimator):
 
@@ -40,7 +39,7 @@ def configurate_estimator(domain: "Domain", path_best_struct=None, iters = None)
 
 
         spl = np.concatenate(micro_spl[iters])
-        lenght = len(spl[spl != 0])
+        lenght = len(spl)
         print(lenght)
 
 

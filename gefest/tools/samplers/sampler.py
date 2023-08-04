@@ -14,7 +14,14 @@ class Sampler:
         """
         self.sampler = sampler
         self.domain = domain
-
+    def sample_init(self, n_samples: int):
+        """
+        Sampling from certain sampler
+        :param n_samples: (Int) number of samples
+        :return: (List(Structure)) sample n_samples structures
+        """
+        samples = self.sampler.sample_init(n_samples=n_samples, domain=self.domain)
+        return samples
     def sample(self, n_samples: int):
         """
         Sampling from certain sampler

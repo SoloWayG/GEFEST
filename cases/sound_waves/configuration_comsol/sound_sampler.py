@@ -2,7 +2,7 @@ from gefest.tools.samplers.standard.standard import StandardSampler
 from gefest.tools.samplers.sampler import Sampler
 
 
-def configurate_sampler(domain):
+def configurate_sampler(domain,initial_state=None):
     """
     ::TODO::
     Create abstract interface for configurations
@@ -11,7 +11,7 @@ def configurate_sampler(domain):
     # User-defined sampler
     # it should be created as object with .sample() method
     # ------------
-    standard_sampler = StandardSampler()
+    standard_sampler = StandardSampler(initial_state=initial_state)
 
     # ------------
     # GEFEST sampler,

@@ -11,13 +11,14 @@ NUM_PROC = 1
 
 
 class StandardSampler:
-
-    def sample(self, n_samples: int, domain: Domain, initial_state=None):
+    def __init__(self,initial_state=None):
+        self.initial_state=initial_state
+    def sample_init(self, n_samples: int, domain: Domain):
         # Method for initialization of population
 
         population_new = []
 
-        if initial_state is None:
+        if self.initial_state is None:
             while len(population_new) < n_samples:
                 if NUM_PROC > 1:
                     with Pool(NUM_PROC) as p:
@@ -32,8 +33,26 @@ class StandardSampler:
                     if len(population_new) == n_samples:
                         return population_new
         else:
-            for _ in range(n_samples):
-                population_new.append(deepcopy(initial_state))
+            for init_p in self.initial_state:
+                population_new.append(init_p)
+        return population_new
+    def sample(self, n_samples: int, domain: Domain):
+        # Method for initialization of population
+
+        population_new = []
+        while len(population_new) < n_samples:
+            if NUM_PROC > 1:
+                with Pool(NUM_PROC) as p:
+                    new_items = p.map(self.get_pop_worker, [domain] * n_samples)
+            else:
+                new_items = []
+                for i in range(n_samples):
+                    new_items.append(self.get_pop_worker(domain))
+
+            for structure in new_items:
+                population_new.append(structure)
+                if len(population_new) == n_samples:
+                    return population_new
         return population_new
 
     def get_pop_worker(self, domain):
