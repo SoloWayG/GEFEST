@@ -46,7 +46,7 @@ figure_names = [i.split(sep='.')[0] for i in figure_file_names]#Split name of fi
 for iteration in range(10):
     for n, fig in enumerate(figure_names):
         ################################
-        new_path = f'0408_025extra_200dur_cross{opt_params.c_rate}__exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}/iter{iteration}/{fig}_exp'     #path to create new dir of experement iteration
+        new_path = f'0708_025extra_200dur_cross{opt_params.c_rate}__exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}/iter{iteration}/{fig}_exp'     #path to create new dir of experement iteration
         ###############################
         if os.path.exists(new_path):#
             shutil.rmtree(new_path) #

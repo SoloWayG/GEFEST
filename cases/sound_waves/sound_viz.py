@@ -4,11 +4,12 @@ from cases.main_conf import opt_params
 from cases.sound_waves.configuration import sound_domain
 from gefest.tools.estimators.simulators.sound_wave.sound_interface import SoundSimulator
 from test.test_sound_simulator import load_file_from_path
+from pathlib import Path
 
+
+root_path = Path(__file__).parent.parent.parent.parent
 init_path = "best_structure.pickle"
 optimized_path = "optimized_structure.pickle"
-
-
 if __name__ == "__main__":
     domain, _ = sound_domain.configurate_domain(
         poly_num=opt_params.n_polys,
@@ -16,8 +17,8 @@ if __name__ == "__main__":
         is_closed=opt_params.is_closed,
     )
 
-    init_structure = load_file_from_path(init_path)
-    optimized_archive = load_file_from_path(optimized_path)
+    init_structure =  load_file_from_path(init_path)
+    optimized_archive =  load_file_from_path(optimized_path)
     optimized_structure = optimized_archive[0]
 
     sound = SoundSimulator(domain)

@@ -2,6 +2,7 @@ import timeit
 import pickle
 
 from gefest.core.opt.gen_design import design
+from gefest.core.opt.operators.operators import point_crossover
 from gefest.core.structure.structure import get_random_structure
 from cases.main_conf import opt_params
 from cases.sound_waves.configuration import sound_optimizer
@@ -18,7 +19,7 @@ opt_params.pop_size = 40
 opt_params.n_steps = 50
 opt_params.n_polys = 1
 opt_params.n_points = 10
-opt_params.c_rate = 0.4
+opt_params.c_rate = 0.6
 LOSS ='MSE'
 is_extra = True
 # ------------
@@ -28,6 +29,7 @@ domain, task_setup = sound_domain.configurate_domain(
     poly_num=opt_params.n_polys,
     points_num=opt_params.n_points,
     is_closed=opt_params.is_closed,
+    polygon_side = 0.1
 )
 
 #-----Upload reference structure from comsol txt polygons
@@ -35,11 +37,7 @@ path_fig = 'gefest/tools/estimators/simulators/comsol/sound/model/figures/'
 root_path = Path(__file__).parent.parent.parent.parent
 path_fig = f'{root_path}/{path_fig}'
 #try to read initial pop if it need
-try:
-    with open(f'{root_path}/cases/sound_waves/comsol_experements/2507_no_del_add_MSE_p_size_35_n_stps_30_m_rate_0.9_extra_True/History/population_30.pickle', "rb") as f:
-        init_pop = pickle.load(f)
-except:
-    init_pop=None
+
 
 figure_file_names = os.listdir(path_fig)#Search names of txt files with points of polygons, drawn in comsol
 print(figure_file_names)
@@ -47,7 +45,7 @@ figure_names = [i.split(sep='.')[0] for i in figure_file_names]#Split name of fi
 print(figure_names)
 best_structure = poly_from_comsol_txt(path=path_fig+figure_file_names[0])#upload new best struct from figure files
 
-new_path = f'0408_no_del_add_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}_extra_{is_extra}'     #path to create new dir of experement iteration
+new_path = f'0908_no_del_add_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}_extra_{is_extra}'     #path to create new dir of experement iteration
 ###############################
 if os.path.exists(new_path):#
     shutil.rmtree(new_path) #
@@ -66,6 +64,11 @@ estimator = sound_estimator.configurate_estimator(
     receivers=2
 )
 
+try:
+    with open(f'{root_path}/cases/sound_waves/comsol_experements/0408_no_del_add_MSE_p_size_40_n_stps_50_m_rate_0.9_extra_True/History/population_9.pickle', "rb") as f:
+        init_pop = pickle.load(f)
+except:
+    init_pop=None
 sampler = sound_sampler.configurate_sampler(domain=domain,initial_state=init_pop)
 
 optimizer = sound_optimizer.configurate_optimizer(
@@ -73,6 +76,7 @@ optimizer = sound_optimizer.configurate_optimizer(
     crossover_rate=opt_params.c_rate,
     mutation_rate=opt_params.m_rate,
     task_setup=task_setup,
+    evolutionary_operators=point_crossover
 )
 
 # ------------

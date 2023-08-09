@@ -70,7 +70,7 @@ def design(n_steps: int,
     samples = sampler.sample_init(n_samples=pop_size)
 
 
-    for i in tqdm(range(n_steps)):
+    for i in range(n_steps):
         performance, dice_metric = estimator.estimate(population=samples)
 
         # Choose best and save the results

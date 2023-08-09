@@ -19,6 +19,7 @@ class StandardSampler:
         population_new = []
 
         if self.initial_state is None:
+            print('Cant initialize population')
             while len(population_new) < n_samples:
                 if NUM_PROC > 1:
                     with Pool(NUM_PROC) as p:
@@ -33,6 +34,7 @@ class StandardSampler:
                     if len(population_new) == n_samples:
                         return population_new
         else:
+            print('Initialization population')
             for init_p in self.initial_state:
                 population_new.append(init_p)
         return population_new

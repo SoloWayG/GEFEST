@@ -61,7 +61,7 @@ class Comsol:
             model.mesh()
             start_time = time.time()
             model.solve()
-            if (time.time() - start_time) > 600:#Check How long estimating model. If estimating longer than 10 minute - model saving as bad
+            if (time.time() - start_time) > 1200:#Check How long estimating model. If estimating longer than 10 minute - model saving as bad
                 print('Model solving too long!')
                 model.save(self.dir_path + f'/models/_BAD_{time.time()}.mph')
         except Exception as ex:
