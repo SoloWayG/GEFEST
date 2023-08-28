@@ -23,12 +23,12 @@ from cases.sound_waves.experements.microphone_points import Microphone
 # If the value is False, pretrained models will be selected
 # otherwise put path to your model
 opt_params.is_closed = True
-opt_params.pop_size = 50
-opt_params.n_steps = 200
+opt_params.pop_size = 30
+opt_params.n_steps = 20
 opt_params.n_polys = 1
 opt_params.n_points = 10
-opt_params.m_rate = 0.6
-opt_params.c_rate = 0.3
+opt_params.m_rate = 0
+opt_params.c_rate = 0
 is_extra = True
 LOSS = 'MSE'
 micro = Microphone().array()
@@ -46,7 +46,7 @@ figure_names = [i.split(sep='.')[0] for i in figure_file_names][:1]#Split name o
 for iteration in range(10):
     for n, fig in enumerate(figure_names):
         ################################
-        new_path = f'1_0908_025extra_200dur_cross{opt_params.c_rate}__exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}/iter{iteration}/{fig}_exp'     #path to create new dir of experement iteration
+        new_path = f'random_extra_200dur_cross{opt_params.c_rate}__exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}/iter{iteration}/{fig}_exp'     #path to create new dir of experement iteration
         ###############################
         if os.path.exists(new_path):#
             shutil.rmtree(new_path) #

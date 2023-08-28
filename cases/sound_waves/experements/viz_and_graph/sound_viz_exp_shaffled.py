@@ -55,7 +55,7 @@ if __name__ == "__main__":
     class SoundSimulator_(SoundSimulator):
         def __init__(self, domain):
             super().__init__(domain)
-            self.duration = 400
+            self.duration = 200
             self.pressure_hist = np.zeros((self.duration, self.size_y, self.size_x))
 
 
@@ -105,15 +105,6 @@ if __name__ == "__main__":
             for a in range(lenght):
                 performance_path_2 = ([f"History_{a}/performance_{i}.pickle" for i in range(archs)])
                 fitness = ([upload_file(i) for i in performance_path_2])
-                # best_fit_ = []
-                # fit_arr = [i[0] for i in fitness]
-                # best_fit_.append(fit_arr[0])
-                # for u in range(1, len(fit_arr)):
-                #     if fit_arr[u] < best_fit_[u - 1]:
-                #         best_fit_.append(fit_arr[u])
-                #     else:
-                #         best_fit_.append(best_fit_[u - 1])
-                # best_fit.append(best_fit_)
                 best_fit.append([i[0] for i in fitness])
             best_fit[1], best_fit[2] = best_fit[2], best_fit[1]
             for fit in range(len(best_fit)):
@@ -128,22 +119,3 @@ if __name__ == "__main__":
             ax.grid(which='major')
             ax.grid(which='minor')
     plt.show()
-best_dice = []
-for a in range(lenght):
-    performance_path_2 = ([f"History_{a}/dice_metric_{i}.pickle" for i in range(archs)])
-    fitness = ([upload_file(i) for i in performance_path_2])
-    best_dice.append([i[0] for i in fitness])
-best_dice[1], best_dice[2] = best_dice[2], best_dice[1]
-for fit in range(len(best_dice)):
-    # if i < len(best_fit)-1:
-
-    plt.plot(best_dice[fit], label=f'{receivers[fit]} receivers')
-    plt.xlabel("Iterations",labelpad=0)
-    plt.ylabel("Dice",labelpad=0)
-plt.minorticks_on()
-plt.legend()
-plt.title("Dice \n of best population individual")
-plt.grid(which='major')
-plt.grid(which='minor')
-plt.ylim(0,1.1)
-plt.show()

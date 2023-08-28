@@ -1,6 +1,8 @@
 import os
 import shutil
 import pickle
+from copy import deepcopy
+
 from tqdm import tqdm
 from pathlib import Path
 
@@ -76,7 +78,7 @@ def design(n_steps: int,
         # Choose best and save the results
         performance, samples, dice_metric = _remain_best(performance, samples,dice_metric)
         print(f'\nBest performance is {performance[0]},dice is {dice_metric[0]}')
-
+        best_individs = deepcopy(samples[:3])
         _save_res(performance, samples, dice_metric)
 
         if optimizer:
@@ -88,8 +90,8 @@ def design(n_steps: int,
             if not optimizer:
                 samples = sampler.sample(n_samples=pop_size)
             elif i<extra_break:#stop extra sampling after extra_break iterations
-                extra_samples = sampler.sample(n_samples=(pop_size)//4)
-                samples = samples + extra_samples
+                extra_samples = sampler.sample(n_samples=(pop_size))
+                samples = best_individs + extra_samples
         print('len samples',len(samples))
         if i == n_steps-1:
             i +=1

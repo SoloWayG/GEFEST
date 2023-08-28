@@ -45,7 +45,7 @@ figure_names = [i.split(sep='.')[0] for i in figure_file_names]#Split name of fi
 print(figure_names)
 best_structure = poly_from_comsol_txt(path=path_fig+figure_file_names[0])#upload new best struct from figure files
 
-new_path = f'0908_no_del_add_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}_extra_{is_extra}'     #path to create new dir of experement iteration
+new_path = f'1408_new_no_del_add_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}_extra_{is_extra}'     #path to create new dir of experement iteration
 ###############################
 if os.path.exists(new_path):#
     shutil.rmtree(new_path) #
@@ -69,7 +69,7 @@ try:
         init_pop = pickle.load(f)
 except:
     init_pop=None
-sampler = sound_sampler.configurate_sampler(domain=domain,initial_state=init_pop)
+sampler = sound_sampler.configurate_sampler(domain=domain,initial_state=None)
 
 optimizer = sound_optimizer.configurate_optimizer(
     pop_size=opt_params.pop_size,

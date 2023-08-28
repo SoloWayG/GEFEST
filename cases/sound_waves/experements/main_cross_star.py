@@ -16,6 +16,7 @@ from poly_from_point import poly_from_comsol_txt
 import numpy as np
 import os
 import shutil
+from tqdm import tqdm
 from gefest.core.structure.structure import Structure
 from gefest.core.structure.point import Point
 from gefest.core.structure.polygon import Polygon
@@ -41,12 +42,12 @@ In this case i create a two-cycled experiment to optimize object reconstruction 
 to detect a sound pressure level). In this cycle create new History dir (with performance and population) and opt_structures. Also in cycle run n_steps of evolutions.
 
 """
-figure_file_names = os.listdir('Comsol_points/figuers')#Search names of txt files with points of polygons, drawn in comsol
+figure_file_names = os.listdir('Comsol_points_warp/figuers')#Search names of txt files with points of polygons, drawn in comsol
 figure_names = [i.split(sep='.')[0] for i in figure_file_names][:1]#Split name of files for create dir name, based on prepared polygons names
 for iteration in range(10):
     for n, fig in enumerate(figure_names):
         ################################
-        new_path = f'1_0908_025extra_200dur_cross{opt_params.c_rate}__exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}/iter{iteration}/{fig}_exp'     #path to create new dir of experement iteration
+        new_path = f'3_0908_025extra_200dur_cross{opt_params.c_rate}__exp_no_add_del_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}/iter{iteration}/{fig}_exp'     #path to create new dir of experement iteration
         ###############################
         if os.path.exists(new_path):#
             shutil.rmtree(new_path) #
@@ -67,7 +68,7 @@ for iteration in range(10):
             pickle.dump(best_structure, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-        for i in range(len(micro)):
+        for i in tqdm(range(len(micro))):
             estimator = sound_estimator.configurate_estimator(
                 domain=domain, path_best_struct=new_path+"/best_structure.pickle",iters=i
             )

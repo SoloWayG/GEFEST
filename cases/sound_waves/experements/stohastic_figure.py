@@ -12,6 +12,7 @@ from cases.sound_waves.experements.configuration_exp import (
     sound_optimizer,
     sound_sampler,
 )
+from gefest.tools.estimators.simulators.sound_wave.sound_interface import SoundSimulator
 from poly_from_point import poly_from_comsol_txt
 import numpy as np
 import os
@@ -40,10 +41,12 @@ to detect a sound pressure level). In this cycle create new History dir (with pe
 """
 figure_file_names = os.listdir('Comsol_points/figuers')#Search names of txt files with points of polygons, drawn in comsol
 figure_names = [i.split(sep='.')[0] for i in figure_file_names]#Split name of files for create dir name, based on prepared polygons names
+
 for n, fig in enumerate(figure_names):
     ################################
-    new_path = f'Base_2807_025extra_{LOSS}_p_size_{opt_params.pop_size}_n_stps_{opt_params.n_steps}_m_rate_{opt_params.m_rate}/{fig}_exp'     #path to create new dir of experement iteration
+        #path to create new dir of experement iteration
     ###############################
+    new_path = f'sigma_of_simulate/{fig}'
     if os.path.exists(new_path):#
         shutil.rmtree(new_path) #
     os.makedirs(new_path)       #
@@ -59,44 +62,50 @@ for n, fig in enumerate(figure_names):
     best_structure = poly_from_comsol_txt(path='Comsol_points/figuers/'+figure_file_names[n])#upload new best struct from figure files
     #best_structure = get_random_structure(domain)
 
-    with open(new_path+"/best_structure.pickle", "wb") as handle:
+    with open(new_path+f"/best_structure{fig}.pickle", "wb") as handle:
         pickle.dump(best_structure, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    sound = SoundSimulator(domain=domain)
+    spl_for_check = []
+    for i in range(500):
+        spl_for_check.append(sound.estimate(best_structure))
 
+    with open(new_path+f"/spl_for_check_{fig}.pickle", "wb") as handle:
+        pickle.dump(spl_for_check, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    for i in range(len(micro)):
-        estimator = sound_estimator.configurate_estimator(
-            domain=domain, path_best_struct=new_path+"/best_structure.pickle",iters=i
-        )
-
-        sampler = sound_sampler.configurate_sampler(domain=domain)
-
-        optimizer = sound_optimizer.configurate_optimizer(
-            pop_size=opt_params.pop_size,
-            crossover_rate=opt_params.c_rate,
-            mutation_rate=opt_params.m_rate,
-            task_setup=task_setup,
-            evolutionary_operators=default_operators
-
-        )
-
-        # ------------
-        # Generative design stage
-        # ------------
-
-        start = timeit.default_timer()
-        optimized_pop = design(
-            n_steps=opt_params.n_steps,
-            pop_size=opt_params.pop_size,
-            estimator=estimator,
-            sampler=sampler,
-            optimizer=optimizer,
-            extra=is_extra,
-            path=new_path+f'/History_{i}',
-            extra_break=opt_params.n_steps
-        )
-        spend_time = timeit.default_timer() - start
-        print(f"spent time {spend_time} sec")
-
-        with open(new_path+f"/optimized_structure_{i}.pickle", "wb") as handle:
-            pickle.dump(optimized_pop, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        #next = i+1
+    # for i in range(len(micro)):
+    #     estimator = sound_estimator.configurate_estimator(
+    #         domain=domain, path_best_struct=new_path+"/best_structure.pickle",iters=i
+    #     )
+    #
+    #     sampler = sound_sampler.configurate_sampler(domain=domain)
+    #
+    #     optimizer = sound_optimizer.configurate_optimizer(
+    #         pop_size=opt_params.pop_size,
+    #         crossover_rate=opt_params.c_rate,
+    #         mutation_rate=opt_params.m_rate,
+    #         task_setup=task_setup,
+    #         evolutionary_operators=default_operators
+    #
+    #     )
+    #
+    #     # ------------
+    #     # Generative design stage
+    #     # ------------
+    #
+    #     start = timeit.default_timer()
+    #     optimized_pop = design(
+    #         n_steps=opt_params.n_steps,
+    #         pop_size=opt_params.pop_size,
+    #         estimator=estimator,
+    #         sampler=sampler,
+    #         optimizer=optimizer,
+    #         extra=is_extra,
+    #         path=new_path+f'/History_{i}',
+    #         extra_break=opt_params.n_steps
+    #     )
+    #     spend_time = timeit.default_timer() - start
+    #     print(f"spent time {spend_time} sec")
+    #
+    #     with open(new_path+f"/optimized_structure_{i}.pickle", "wb") as handle:
+    #         pickle.dump(optimized_pop, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    #     #next = i+1
