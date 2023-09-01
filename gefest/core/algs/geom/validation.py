@@ -118,8 +118,8 @@ def distance_between_points(structure: 'Structure', domain: 'Domain') -> bool:
     for i in [[p.coords()[:2] for p in poly.points] for poly in p1.polygons]:
         for ind, pnt in enumerate(i[1:]):
             check.append(norm(np.array(pnt) - np.array(i[ind]), ord=1) < lenght)
-    if any(check):
-        print('Намутировал плохой полигон!, distance_between_points')
+    #if any(check):
+        #print('Bad polygon mutated!, distance_between_points')
     return any(check)
 def distance_between_points_in_poly(poly: 'Polygon', domain: 'Domain') -> bool:
     """The method indicates that any :obj:`Point` in the :obj:`Polygon`
@@ -134,8 +134,8 @@ def distance_between_points_in_poly(poly: 'Polygon', domain: 'Domain') -> bool:
     for i in [p.coords()[:2] for p in poly.points]:
         for ind, pnt in enumerate(i[1:]):
             check.append(norm(np.array(pnt) - np.array(i[ind]), ord=1) < lenght)
-    if any(check):
-        print('Намутировал плохой полигон!, distance_between_points_in_poly')
+    #if any(check):
+        #print('Bad polygon mutated!, distance_between_points_in_poly')
     return any(check)
 
 def unclosed_poly(structure: 'Structure', domain: 'Domain') -> bool:

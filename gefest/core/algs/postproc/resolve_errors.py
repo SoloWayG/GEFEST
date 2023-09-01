@@ -42,7 +42,7 @@ def postprocess(structure: Structure, domain: Domain) -> Structure:
             local_structure = Structure([poly])
             if distance_between_points(local_structure, domain):
                 corrected_structure.polygons[i] = get_random_poly(local_structure,domain)
-                print('Исправили полигон в postprocess')
+                #print('polygon changed in postprocess')
             if unclosed_poly(local_structure, domain) and domain.is_closed:
                 corrected_structure.polygons[i] = _correct_unclosed_poly(poly)
             if self_intersection(local_structure):
