@@ -13,8 +13,8 @@ import pandas as pd
 
 grid_resolution_x = 300 # Number of points on x-axis
 grid_resolution_y = 300  # Number of points on y-axis
-coord_X = np.linspace(20, 100, grid_resolution_x + 1)  # X coordinate for spatial grid
-coord_Y = np.linspace(20, 100, grid_resolution_y + 1)  # Y coordinate for spatial grid
+coord_X = np.linspace(0, 120, grid_resolution_x + 1)  # X coordinate for spatial grid
+coord_Y = np.linspace(0, 120, grid_resolution_y + 1)  # Y coordinate for spatial grid
 
 grid = [grid_resolution_x, grid_resolution_y]  # points grid
 
