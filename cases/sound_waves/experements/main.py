@@ -20,8 +20,8 @@ from cases.sound_waves.experements.microphone_points import Microphone
 # If the value is False, pretrained models will be selected
 # otherwise put path to your model
 opt_params.is_closed = True
-opt_params.pop_size = 50
-opt_params.n_steps = 100
+opt_params.pop_size = 2
+opt_params.n_steps = 2
 opt_params.n_polys = 1
 opt_params.n_points = 10
 opt_params.m_rate = 0.9
@@ -30,14 +30,7 @@ is_extra = True
 LOSS = 'MSE'
 micro = Microphone().array()
 point_cnt_mes = len(micro)
-"""
-In this case i create a two-cycled experiment to optimize object reconstruction sound case with simle simulator.
-1) I drawn a few figures (polygons) to create from ones a reference poly (best_structure).
-2) First cycle run for every drawn figure. Every cycle created directory for figure-experement ( named 'figname_exp') and genereted new reference structure.
-3) Second cycle run in every figure for every number of points in cases.sound_waves.experements.microphone_points (that points, where we placed a sound-recevers/microphones 
-to detect a sound pressure level). In this cycle create new History dir (with performance and population) and opt_structures. Also in cycle run n_steps of evolutions.
 
-"""
 figure_file_names = os.listdir('Comsol_points/figuers')#Search names of txt files with points of polygons, drawn in comsol
 figure_names = [i.split(sep='.')[0] for i in figure_file_names]#Split name of files for create dir name, based on prepared polygons names
 for n, fig in enumerate(figure_names):

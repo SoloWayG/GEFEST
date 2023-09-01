@@ -183,14 +183,14 @@ def points_mutation(new_structure: Structure, polygon_to_mutate_idx, domain: Dom
     else:
         structure_mut = pos_change_point_mutation(structure_mut, polygon_to_mutate_idx, mutate_point_idx, domain)
     '''
-    #GLEB: I add an verification, that allow to generate only fine poly after mutation
+    #GLEB: I add a verification, that allow to generate only fine poly after mutation
     # Will mutate point again and again until sides of poly will not be correct lenght
     '''
     trys = 5
 
     while distance_between_points(structure_mut,domain):
         structure_mut = copy.deepcopy(new_structure)
-        print('Чиним плохой полигон','mutation')
+        print('Changing a bad polygon','mutation')
         if trys < 4:#Try to make a same mutation 2 times. If it not possible -> try other vatiants
             polygon_to_mutate = structure_mut.polygons[polygon_to_mutate_idx]
             mutate_point_idx = random.randint(0, len(polygon_to_mutate.points) - 1)

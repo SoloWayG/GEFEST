@@ -20,7 +20,7 @@ def configurate_estimator(domain: "Domain", path_best_struct=None,receivers = 2,
         path_to_sim = f'{root_path}/gefest/tools/estimators/simulators/comsol/sound/model/Reflect_run_two_recivers2.mph'
     print(path_to_sim)
     client = mph.Client(cores=8)
-    print('Открыт клиент',client)
+    print('Open Client',client)
     sound = Comsol(path_to_mph=path_to_sim,dir_path=dir_path,client=client)
     best_spl_path = dir_path + '/best_spl.pickle'
     # try:
