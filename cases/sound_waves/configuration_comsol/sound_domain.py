@@ -20,8 +20,8 @@ path_allow = 'gefest/tools/estimators/simulators/comsol/sound/model/'
 root_path = Path(__file__).parent.parent.parent.parent
 path_allow = f'{root_path}/{path_allow}'
 res = pd.read_csv(path_allow+'allow_area.txt', sep=' ',header=None)
-allow_ar = [(float(round(res.iloc[i,0], 2)), float(round(res.iloc[i, 1], 2))) for i in res.index]
-#allow_ar=[[45.54, 55], [55, 55], [55, 45], [45.54, 45], [45.54, 55]]
+#allow_ar = [(float(round(res.iloc[i,0], 2)), float(round(res.iloc[i, 1], 2))) for i in res.index]
+allow_ar=[[0, 0], [0, 120], [120, 120], [120, 0], [0, 0]]
 #(res.iloc[i,0],res.iloc[i, 1])
 """
 Prohibited objects
