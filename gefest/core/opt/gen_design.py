@@ -1,6 +1,8 @@
 import os
 import shutil
 import pickle
+from copy import deepcopy
+
 from tqdm import tqdm
 from pathlib import Path
 
@@ -10,7 +12,9 @@ def design(n_steps: int,
            estimator,
            sampler,
            optimizer,
-           extra=False):
+           extra=False,
+           path = 'HistoryFiles',
+           extra_break=250):
     """
     Generative design procedure
     :param n_steps: (Int) number of generative design steps
@@ -22,7 +26,7 @@ def design(n_steps: int,
     :return: (List[Structure]) designed samples
     """
 
-    def _save_res(performance, samples):
+    def _save_res(performance, samples, dice_metric):
         """
         Saving results in pickle format
         :param performance: (List), performance of samples
@@ -35,9 +39,12 @@ def design(n_steps: int,
         with open(Path(path, f'population_{i}.pickle'), 'wb') as handle:
             pickle.dump(samples, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
+        with open(Path(path, f'dice_metric_{i}.pickle'), 'wb') as handle:
+            pickle.dump(dice_metric, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
         return
 
-    def _remain_best(performance, samples):
+    def _remain_best(performance, samples, dice_metric):
         """
         From current population we remain best only
         :param performance: (List), performance of samples
@@ -45,32 +52,34 @@ def design(n_steps: int,
         :return: (Tuple), performance and samples
         """
         # Combination of performance and samples
-        perf_samples = list(zip(performance, samples))
+        perf_samples = list(zip(performance, samples, dice_metric))
 
         # Sorting with respect to performance
         sorted_pop = sorted(perf_samples, key=lambda x: x[0])[:pop_size]
 
         performance = [x[0] for x in sorted_pop]
         samples = [x[1] for x in sorted_pop]
+        dice_metric = [x[2] for x in sorted_pop]
 
-        return performance, samples
+        return performance, samples, dice_metric
 
-    path = 'HistoryFiles'
+    path = path
 
     if os.path.exists(path):
         shutil.rmtree(path)
     os.makedirs(path)
 
-    samples = sampler.sample(n_samples=pop_size)
+    samples = sampler.sample_init(n_samples=pop_size)
 
-    for i in tqdm(range(n_steps)):
-        performance = estimator.estimate(population=samples)
+
+    for i in range(n_steps):
+        performance, dice_metric = estimator.estimate(population=samples)
 
         # Choose best and save the results
-        performance, samples = _remain_best(performance, samples)
-        print(f'\nBest performance is {performance[0]}')
-
-        _save_res(performance, samples)
+        performance, samples, dice_metric = _remain_best(performance, samples,dice_metric)
+        print(f'\nBest performance is {performance[0]},dice is {dice_metric[0]}')
+        best_individs = deepcopy(samples[:3])
+        _save_res(performance, samples, dice_metric)
 
         if optimizer:
             samples = optimizer.step(population=samples, performance=performance, n_step=i)
@@ -80,8 +89,17 @@ def design(n_steps: int,
         if not optimizer or extra:
             if not optimizer:
                 samples = sampler.sample(n_samples=pop_size)
-            else:
-                extra_samples = sampler.sample(n_samples=pop_size)
+            elif i<extra_break:#stop extra sampling after extra_break iterations
+                extra_samples = sampler.sample(n_samples=(pop_size))
                 samples = samples + extra_samples
+        print('len samples',len(samples))
+        if i == n_steps-1:
+            i +=1
+            performance, dice_metric = estimator.estimate(population=samples)
+
+            # Choose best and save the results
+            performance, samples,dice_metric = _remain_best(performance, samples,dice_metric)
+            print(f'\nBest performance is {performance[0]},dice is {dice_metric[0]}')
+            _save_res(performance, samples, dice_metric)
 
     return samples

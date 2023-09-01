@@ -100,7 +100,7 @@ class SoundSimulator:
         self.domain = domain
         self.map_size = (round(1.2 * domain.max_y), round(1.2 * domain.max_x))
         self.size_y, self.size_x = self.map_size
-        self.duration = 150
+        self.duration = 200
         # obstacle_map handling
         if (
             obstacle_map is not None
@@ -115,7 +115,8 @@ class SoundSimulator:
             self.obstacle_map = np.zeros((self.size_y, self.size_x))
         # Source position is the center of the map
         self.s_y = self.size_y // 2
-        self.s_x = self.size_x // 2
+        #self.s_x = self.size_x // 2
+        self.s_x = 0
         self.pressure = np.zeros((self.size_y, self.size_x))
         self.pressure_hist = np.zeros((self.duration, self.size_y, self.size_x))
         # outflow velocities from each cell
@@ -188,8 +189,10 @@ class SoundSimulator:
     def estimate(self, structure):
         self.obstacle_map = generate_map(self.domain, structure)
         self.run()
-        spl = self.spl()
 
+
+
+        spl = self.spl()
         self.pressure = np.zeros((self.size_y, self.size_x))
         self.pressure_hist = np.zeros((self.duration, self.size_y, self.size_x))
         self._velocities = np.zeros((self.size_y, self.size_x, 4))

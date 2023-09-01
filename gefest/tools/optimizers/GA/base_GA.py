@@ -1,5 +1,6 @@
 import copy
 import math
+import random
 from random import randint
 
 import numpy as np
@@ -67,7 +68,6 @@ class BaseGA:
 
     def random_selection(self, group_size):
         return [self._pop[randint(0, len(self._pop) - 1)] for _ in range(group_size)]
-
     def tournament_selection(self, fraction=0.1):
         """The method allows to select the best ones from whole population
         Args:
@@ -92,6 +92,25 @@ class BaseGA:
                 chosen.append(rnd)
         return chosen
 
+
+
+    def roulette_selection(self):
+        """The method allows to select the best ones from whole population.
+        relative probability based on reversed fitness
+        Returns:
+            The best individuals from given population. Their number is equal to ``'initial_number' * fraction``
+        """
+        _fitness = [i.fitness for i in self._pop]
+        probability = [(i/(sum(_fitness))) for i in _fitness]
+        probability = [(max(probability)/i) for i in probability]
+        probability = [i/sum(probability) for i in probability]
+
+        chosen=[]
+
+        while len(chosen) < self.params.pop_size:
+            chosen.append(np.random.choice(a=self._pop, p=probability))
+        return chosen
+
     def reproduce(self, selected):
         """The method imitatess evolutionory reproduce process via apply
         `crossover` and `mutation` to given undividuals from population.
@@ -102,6 +121,18 @@ class BaseGA:
         """
         children = []
         np.random.shuffle(selected)
+        ####
+        reproduced = []
+        # for _ in range(len(selected)):
+        #     i1 = random.randint(0, len(selected)-1)#set random index
+        #     i2 = random.randint(0, len(selected)-1)
+        #     while i1!=i2 and i1 not in reproduced:
+        #         i1 = random.randint(0, len(selected)-1)
+        #         i2 = random.randint(0, len(selected)-1)
+        #     reproduced.append(i1)
+        #     p1 = selected[i1]
+        #     p2 = selected[i2]
+        ####
         for pair_index in range(0, len(selected) - 1):
             p1 = selected[pair_index]
             p2 = selected[pair_index + 1]
@@ -114,8 +145,8 @@ class BaseGA:
                                       domain=self.task_setup.domain,
                                       rate=self.params.mutation_rate)
 
-            if str(child_gen) != str(p1.genotype) and str(child_gen) != str(p2.genotype):
-                child = Individual(genotype=copy.deepcopy(child_gen))
-                children.append(child)
+            #if str(child_gen) != str(p1.genotype) and str(child_gen) != str(p2.genotype):#
+            child = Individual(genotype=copy.deepcopy(child_gen))
+            children.append(child)
 
         return children

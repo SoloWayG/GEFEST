@@ -1,6 +1,6 @@
 from typing import Optional, Callable, List
 from gefest.core.structure.structure import Structure
-
+import numpy as np
 
 class Estimator:
     """
@@ -24,16 +24,17 @@ class Estimator:
         :return: List(Float) performance of population
         """
         performance = []
+        dice_metric = []
         size = len(population)
-
         if self.loss:
             for i in range(size):
-                one_perf = self.loss(population[i], self.estimator)
+                one_perf, one_dice= self.loss(population[i], self.estimator)
                 performance.append(one_perf)
+                dice_metric.append(one_dice)
 
         else:
             for i in range(size):
                 one_perf = self.estimator.estimate(population[i])
                 performance.append(one_perf)
 
-        return performance
+        return performance, dice_metric

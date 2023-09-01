@@ -5,7 +5,9 @@ from multiprocessing import Pool
 
 import numpy as np
 
+from gefest.core.algs.geom.validation import distance_between_points
 from gefest.core.algs.postproc.resolve_errors import postprocess
+from gefest.core.geometry.geometry_2d import Geometry2D
 from gefest.core.opt.constraints import check_constraints
 from gefest.tools.samplers.standard.standard import MAX_ITER, NUM_PROC, StandardSampler
 from gefest.core.structure.domain import Domain
@@ -66,7 +68,7 @@ def mutation(structure: Structure, domain: Domain, rate=0.6) -> Structure:
 
 
 def polygons_mutation(new_structure: Structure, polygon_to_mutate_idx, domain: Domain) -> Structure:
-    mutation_way = [drop_poly, add_poly, rotate_poly, resize_poly]
+    mutation_way = [rotate_poly, resize_poly]
     choosen_way = random.choice(mutation_way)
     new_structure = choosen_way(new_structure, polygon_to_mutate_idx, domain)
 
@@ -167,9 +169,9 @@ def pos_change_point_mutation(new_structure: Structure, polygon_to_mutate_idx, m
 
 def points_mutation(new_structure: Structure, polygon_to_mutate_idx, domain: Domain) -> Structure:
     # Choosing type of points mutation, polygon to mutate and point to mutate
+    structure_mut = copy.deepcopy(new_structure)
 
-    polygon_to_mutate = new_structure.polygons[polygon_to_mutate_idx]
-
+    polygon_to_mutate = structure_mut.polygons[polygon_to_mutate_idx]
     mutate_point_idx = random.randint(0, len(polygon_to_mutate.points) - 1)
     point_to_mutate = polygon_to_mutate.points[mutate_point_idx]
     if point_to_mutate in domain.fixed_points:
@@ -177,17 +179,38 @@ def points_mutation(new_structure: Structure, polygon_to_mutate_idx, domain: Dom
 
     case = random.randint(0, 1)
     if case == 0:
-        new_structure = add_delete_point_mutation(new_structure, polygon_to_mutate_idx, mutate_point_idx, domain)
+        structure_mut = add_delete_point_mutation(structure_mut, polygon_to_mutate_idx, mutate_point_idx, domain)
     else:
-        new_structure = pos_change_point_mutation(new_structure, polygon_to_mutate_idx, mutate_point_idx, domain)
+        structure_mut = pos_change_point_mutation(structure_mut, polygon_to_mutate_idx, mutate_point_idx, domain)
+    '''
+    #GLEB: I add an verification, that allow to generate only fine poly after mutation
+    # Will mutate point again and again until sides of poly will not be correct lenght
+    '''
+    trys = 5
 
-    return new_structure
+    while distance_between_points(structure_mut,domain):
+        structure_mut = copy.deepcopy(new_structure)
+        print('Чиним плохой полигон','mutation')
+        if trys < 4:#Try to make a same mutation 2 times. If it not possible -> try other vatiants
+            polygon_to_mutate = structure_mut.polygons[polygon_to_mutate_idx]
+            mutate_point_idx = random.randint(0, len(polygon_to_mutate.points) - 1)
+            case = random.randint(0, 1)
+
+
+        if case == 0:
+
+            structure_mut = add_delete_point_mutation(structure_mut, polygon_to_mutate_idx, mutate_point_idx, domain)
+        else:
+            structure_mut = pos_change_point_mutation(structure_mut, polygon_to_mutate_idx, mutate_point_idx, domain)
+        trys -=1
+        if trys==0:
+            return None #If case cant mutate a fine poly -> then stop
+    return structure_mut
 
 
 def mutate_worker(args):
     structure, changes_num, domain = args[0], args[1], args[2]
     polygon_mutation_probab = 0.5
-
     try:
         new_structure = copy.deepcopy(structure)
 
