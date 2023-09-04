@@ -14,8 +14,8 @@ class Microphone:
               self.matrix[120 // 2, -1], self.matrix[120 // 4, -1], self.matrix[-1, -1],
               self.matrix[-1, 3 * 120 // 4], self.matrix[-1, 120 // 2]]],
 
-            [self.matrix[0, 59:-1],self.matrix[:,-1],self.matrix[-1,59:-1]],
-            [self.matrix[0, 59:-1],self.matrix[:,-1],self.matrix[-1,59:-1],self.matrix[11:109,55],self.matrix[109,55:109],self.matrix[11:109,109],self.matrix[10,55:109]],
+            [self.matrix[0, 64:-1][::4], self.matrix[7:-7, -1][::3], self.matrix[-1, 64:-1][::4]],
+            [self.matrix[0, 59:-1], self.matrix[:, -1], self.matrix[-1, 59:-1]],
             self.matrix,
         ]
         return arrs
