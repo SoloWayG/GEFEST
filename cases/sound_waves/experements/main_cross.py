@@ -13,12 +13,8 @@ from cases.sound_waves.experements.configuration_exp import (
     sound_sampler,
 )
 from poly_from_point import poly_from_comsol_txt
-import numpy as np
 import os
 import shutil
-from gefest.core.structure.structure import Structure
-from gefest.core.structure.point import Point
-from gefest.core.structure.polygon import Polygon
 from cases.sound_waves.experements.microphone_points import Microphone
 # If the value is False, pretrained models will be selected
 # otherwise put path to your model
