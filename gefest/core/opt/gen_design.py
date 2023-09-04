@@ -88,7 +88,7 @@ def design(n_steps: int,
         # or if optimizer is missing
         if not optimizer or extra:
             if not optimizer:
-                samples = sampler.sample(n_samples=pop_size)
+                samples =best_individs+ sampler.sample(n_samples=pop_size)
             elif i<extra_break:#stop extra sampling after extra_break iterations
                 extra_samples = sampler.sample(n_samples=(pop_size))
                 samples = samples + extra_samples
