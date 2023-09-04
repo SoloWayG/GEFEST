@@ -7,33 +7,38 @@ from cases.sound_waves.experements.microphone_points import Microphone
 import numpy as np
 from gefest.tools.utils.count_files import count_files
 import os
+from pathlib import Path
+
+root_path = Path(__file__).parent.parent.parent.parent.parent
 def upload_file(path: str):
     with open(path, "rb") as f:
         file = pickle.load(f)
         f.close()
     return file
 
+path_to_result = f'{root_path}/cases/sound_waves/experements/001_3107_roulette/iter_0/bottom_square'
 
-lenght = count_files(path ='../viz_and_graph_serv', like ='optimized_structure_')
-archs = count_files(path ='./History_0', like ='performance_')
+
+lenght = count_files(path =f'{path_to_result}', like ='optimized_structure_')
+archs = count_files(path =f'{path_to_result}/History_0', like ='performance_')
 pwd = os.getcwd()
 dir_name = os.path.basename(pwd)
 best_fit =[]
 
 for a in range(lenght):
-    performance_path_2 = ([f"History_{a}/performance_{i}.pickle" for i in range(archs)])
+    performance_path_2 = ([f"{path_to_result}/History_{a}/performance_{i}.pickle" for i in range(archs)])
     fitness = ([upload_file(i) for i in performance_path_2])
 
     #fitness = list(np.array(fitness)/np.max(np.array(fitness)))#Normed loss
     best_fit.append(round(fitness[-1][0],3))
 #--#
-ls = os.listdir(path='../viz_and_graph_serv')
+ls = os.listdir(path=f'{path_to_result}')
 lenght = 0
 for i in ls:
     if 'optimized_structure_' in i:
         lenght+=1
-init_path = "best_structure.pickle"
-optimized_paths = [f"optimized_structure_{i}.pickle" for i in range(lenght)]
+init_path = f"{path_to_result}/best_structure.pickle"
+optimized_paths = [f"{path_to_result}/optimized_structure_{i}.pickle" for i in range(lenght)]
 #preform_path = [f"History_{i}/performance_29.pickle" for i in range(lenght)]
 #str_path = [f"History_{i}/population_29.pickle" for i in range(lenght)]
 
@@ -52,7 +57,7 @@ if __name__ == "__main__":
     class SoundSimulator_(SoundSimulator):
         def __init__(self, domain):
             super().__init__(domain)
-            self.duration = 200
+            self.duration = 2
             self.pressure_hist = np.zeros((self.duration, self.size_y, self.size_x))
 
 
@@ -99,7 +104,7 @@ if __name__ == "__main__":
         else:
             best_fit = []
             for a in range(lenght):
-                performance_path_2 = ([f"History_{a}/performance_{i}.pickle" for i in range(archs)])
+                performance_path_2 = ([f"{path_to_result}/History_{a}/performance_{i}.pickle" for i in range(archs)])
                 fitness = ([upload_file(i) for i in performance_path_2])
                 best_fit.append([i[0] for i in fitness])
             best_fit[1], best_fit[2] = best_fit[2], best_fit[1]
