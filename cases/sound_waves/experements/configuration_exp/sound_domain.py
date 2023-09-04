@@ -30,9 +30,9 @@ fixed_area = [[[0, 55], [10, 55], [10, 45], [0, 45], [0, 55]]]
 path_allow = 'sound_waves/experements/Comsol_points/'
 root_path = Path(__file__).parent.parent.parent.parent
 path_allow = f'{root_path}/{path_allow}'
-res = pd.read_csv(path_allow+'allow_area.txt', sep=' ',header=None)
-print(res)
-allow_ar = [(float(round(res.iloc[i,0], 2)), float(round(res.iloc[i, 1], 2))) for i in res.index]
+# res = pd.read_csv(path_allow+'allow_area.txt', sep=' ',header=None)
+# print(res)
+# allow_ar = [(float(round(res.iloc[i,0], 2)), float(round(res.iloc[i, 1], 2))) for i in res.index]
 
 def configurate_domain(poly_num: int, points_num: int, is_closed: bool):
     # ------------
