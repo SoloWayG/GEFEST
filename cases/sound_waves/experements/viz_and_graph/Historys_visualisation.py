@@ -15,8 +15,31 @@ def upload_file(path: str):
         file = pickle.load(f)
         f.close()
     return file
+paths_for_plotting = ['cases/sound_waves/experements/1508_Random_7_stps_200/iter_0/bottom_square',
+                      'cases/sound_waves/experements/1508_Random_6_stps_200/iter_0/bottom_square',
+                      'cases/sound_waves/experements/1508_Random_5_stps_200/iter_0/bottom_square',
+                      'cases/sound_waves/experements/1508_Random_8_stps_200/iter_0/bottom_square',
+                      'cases/sound_waves/experements/1508_Random_4_stps_200/iter0/bottom_square_exp',
+                      'cases/sound_waves/experements/1508_Random_3_stps_200/iter0/bottom_square_exp',
+                      'cases/sound_waves/experements/1508_Random_2_steps_200/iter0/bottom_square_exp',
+                      'cases/sound_waves/experements/1508_Random_1_stps_200/iter0/bottom_square_exp',
+                     'cases/sound_waves/experements/1508_Random_8_stps_200/iter_0/bottom_triangle']
 
-path_to_result = f'{root_path}/cases/sound_waves/experements/001_3107_roulette/iter_0/bottom_square'
+paths_for_plotting_evo = ['cases/sound_waves/experements/002_3107_roulette/iter_0/bottom_square',
+                      'cases/sound_waves/experements/001_3107_roulette/iter_0/bottom_square',
+                      'cases/sound_waves/experements/003_3107_roulette/iter_0/bottom_square',
+                      'cases/sound_waves/experements/001_3107_tournament/iter_0/bottom_square',
+                      'cases/sound_waves/experements/002_3107_tournament/iter_0/bottom_square',
+                      'cases/sound_waves/experements/003_3107_tournament/iter_0/bottom_square',
+                      'cases/sound_waves/experements/002_3107_roulette/iter_1/bottom_square',
+                      'cases/sound_waves/experements/001_3107_roulette/iter_1/bottom_square',
+                      'cases/sound_waves/experements/003_3107_roulette/iter_1/bottom_square',
+                      'cases/sound_waves/experements/001_3107_tournament/iter_1/bottom_square',
+                      'cases/sound_waves/experements/002_3107_tournament/iter_1/bottom_square',
+                      'cases/sound_waves/experements/1_0908_roulette/iter0/bottom_square_exp'
+                          ]
+
+path_to_result = f'{root_path}/{paths_for_plotting_evo[2]}'
 
 
 lenght = count_files(path =f'{path_to_result}', like ='optimized_structure_')
@@ -57,7 +80,7 @@ if __name__ == "__main__":
     class SoundSimulator_(SoundSimulator):
         def __init__(self, domain):
             super().__init__(domain)
-            self.duration = 2
+            self.duration = 400
             self.pressure_hist = np.zeros((self.duration, self.size_y, self.size_x))
 
 
@@ -106,7 +129,17 @@ if __name__ == "__main__":
             for a in range(lenght):
                 performance_path_2 = ([f"{path_to_result}/History_{a}/performance_{i}.pickle" for i in range(archs)])
                 fitness = ([upload_file(i) for i in performance_path_2])
-                best_fit.append([i[0] for i in fitness])
+                best_fit_ = []
+                fit_arr = [i[0] for i in fitness]
+                best_fit_.append(fit_arr[0])
+                for u in range(1, len(fit_arr)):
+                    if fit_arr[u] < best_fit_[u - 1]:
+                        best_fit_.append(fit_arr[u])
+                    else:
+                        best_fit_.append(best_fit_[u - 1])
+                best_fit.append(best_fit_)
+
+                # best_fit.append([min(i) for i in fitness])
             best_fit[1], best_fit[2] = best_fit[2], best_fit[1]
             for fit in range(len(best_fit)):
 

@@ -28,7 +28,6 @@ paths_for_plotting = ['cases/sound_waves/experements/002_3107_roulette/iter_0/bo
                       'cases/sound_waves/experements/003_3107_roulette/iter_1/bottom_square',
                       'cases/sound_waves/experements/001_3107_tournament/iter_1/bottom_square',
                       'cases/sound_waves/experements/002_3107_tournament/iter_1/bottom_square',
-                      'cases/sound_waves/experements/1_0908_roulette/iter1/bottom_square_exp',
                       'cases/sound_waves/experements/1_0908_roulette/iter0/bottom_square_exp',
 
 
@@ -88,7 +87,7 @@ for cases,ax in enumerate(axs.flat):
         bootstrap =200,
         widths=1,
         medianprops=dict(color="red", linewidth=1.5),
-        showmeans=True
+        showmeans=False
 
 
     )
