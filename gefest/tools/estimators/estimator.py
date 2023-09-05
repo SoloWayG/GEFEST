@@ -25,16 +25,18 @@ class Estimator:
         """
         performance = []
         dice_metric = []
+        spls=[]
         size = len(population)
         if self.loss:
             for i in range(size):
-                one_perf, one_dice= self.loss(population[i], self.estimator)
+                one_perf, one_dice,spl= self.loss(population[i], self.estimator)
                 performance.append(one_perf)
                 dice_metric.append(one_dice)
+                spls.append(spl)
 
         else:
             for i in range(size):
                 one_perf = self.estimator.estimate(population[i])
                 performance.append(one_perf)
 
-        return performance, dice_metric
+        return performance, dice_metric,spls
