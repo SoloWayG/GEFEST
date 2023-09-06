@@ -38,6 +38,11 @@ The dynamics of the optimisation can be visualized as (breakwaters optimisation 
 
 .. image:: /docs/img/breakwaters.gif
 
+Visualisation of sound case optimisation
+==========
+.. image:: /docs/img/horizont_opt_10fps_2.gif
+
+
 How to use
 ==========
 
