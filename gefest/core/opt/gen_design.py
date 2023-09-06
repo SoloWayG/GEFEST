@@ -69,7 +69,7 @@ def design(n_steps: int,
         shutil.rmtree(path)
     os.makedirs(path)
 
-    samples = sampler.sample_init(n_samples=pop_size)
+    samples = sampler.sample(n_samples=pop_size)
 
 
     for i in range(n_steps):
