@@ -72,7 +72,7 @@ paths_for_plotting_evo = ['cases/sound_waves/experements/002_3107_roulette/iter_
                       'cases/sound_waves/experements/1_0908_roulette/iter0/bottom_square_exp'
                           ]
 
-path_to_result = f'{root_path}/{paths_for_plotting_evo[2]}'
+path_to_result = f'{root_path}/{paths_for_plotting_evo[1]}'
 
 
 domain, _ = sound_domain.configurate_domain(

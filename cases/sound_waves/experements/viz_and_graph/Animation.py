@@ -130,4 +130,5 @@ def animate(iter):
     im4.set_array(spl_matrix_(iter, 3))
 
 ani = FuncAnimation(fig, animate, frames=frames,repeat=False)
+ani.save(f'{root_path}/cases/sound_waves/animation')
 plt.show()
