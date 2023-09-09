@@ -18,7 +18,7 @@ from cases.sound_waves.experements.microphone_points import Microphone
 # otherwise put path to your model
 opt_params.is_closed = True
 opt_params.pop_size = 1000
-opt_params.n_steps = 20
+opt_params.n_steps = 6
 opt_params.n_polys = 1
 opt_params.n_points = 10
 opt_params.m_rate = 0
@@ -39,7 +39,7 @@ to detect a sound pressure level). In this cycle create new History dir (with pe
 #figure_names = [i.split(sep='.')[0] for i in figure_file_names][:1]#Split name of files for create dir name, based on prepared polygons names
 
 ################################
-new_path = f'Data_04_09'     #path to create new dir of experement iteration
+new_path = f'Data_06_09'     #path to create new dir of experement iteration
 ###############################
 if os.path.exists(new_path):#
     shutil.rmtree(new_path) #

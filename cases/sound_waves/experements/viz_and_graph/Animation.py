@@ -1,5 +1,7 @@
 import pickle
+import matplotlib
 import matplotlib.pyplot as plt
+from matplotlib import animation
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.image as mpimg
 from cases.main_conf import opt_params
@@ -70,7 +72,7 @@ optimized_structures = [upload_file(i)[0] for i in optimized_paths]
 class SoundSimulator_(SoundSimulator):
     def __init__(self, domain):
         super().__init__(domain)
-        self.duration = 4
+        self.duration = 400
         self.pressure_hist = np.zeros((self.duration, self.size_y, self.size_x))
 
 
@@ -88,15 +90,15 @@ frames = count_files(path =f'{path_to_result}/History_0', like ='matrix_spl_')
 
 
 
-fig = plt.figure(figsize=(6,18))
+fig = plt.figure(figsize=(14,12))
 img = mpimg.imread(f'{root_path}/docs/img/gefest_logo.png')
 
-ax1 = plt.subplot2grid((3,2), (0,0), colspan=1)
-ax6 = plt.subplot2grid((3,2), (0,1), colspan=1)
-ax2= plt.subplot2grid((3,2), (1,0), colspan=1)
-ax3= plt.subplot2grid((3,2), (1,1), colspan=1)
-ax4= plt.subplot2grid((3,2), (2,0), colspan=1)
-ax5= plt.subplot2grid((3,2), (2,1), colspan=1)
+ax1 = plt.subplot2grid((2,3), (0,0), colspan=1)
+ax6 = plt.subplot2grid((2,3), (1,0), colspan=1)
+ax2= plt.subplot2grid((2,3), (0,1), colspan=1)
+ax3= plt.subplot2grid((2,3), (0,2), colspan=1)
+ax4= plt.subplot2grid((2,3), (1,1), colspan=1)
+ax5= plt.subplot2grid((2,3), (1,2), colspan=1)
 
 ax6.imshow(img, aspect='equal')
 ax6.axis('off')
@@ -124,11 +126,22 @@ def spl_matrix_(iter,history):
     spl_matrix = np.where(spl_matrix == 0, np.inf, spl_matrix)
     return spl_matrix
 def animate(iter):
+    ax6.set_title(f'{iter} Iterstion')
     im1.set_array(spl_matrix_(iter,0))
     im2.set_array(spl_matrix_(iter, 1))
     im3.set_array(spl_matrix_(iter, 2))
     im4.set_array(spl_matrix_(iter, 3))
-
+# writervideo = animation.FFMpegWriter(fps=2)
+# writergif = animation.PillowWriter(fps=5)
+matplotlib.rcParams['animation.ffmpeg_path'] = "D:\\Download\\ffmpeg-2023-09-04-git-f8503b4c33-full_build\\bin\\\\ffmpeg.exe"
+Writer = animation.writers['ffmpeg']
+writer = Writer(fps=10, metadata=dict(artist='Me'), bitrate=1800)
 ani = FuncAnimation(fig, animate, frames=frames,repeat=False)
-ani.save(f'{root_path}/cases/sound_waves/animation')
-plt.show()
+path_to_sim=f'{root_path}/cases/sound_waves/animation/test60.mp4'
+#ff=r'D://Projects//GEFEST//GEFEST//cases//sound_waves//animation//test60.mp4'
+
+print('Saving to', path_to_sim)
+ani.save('horizont_opt_10fps_2.mp4',writer=writer)
+ani.save('horizont_opt_10fps_2.gif')
+
+#plt.show()
